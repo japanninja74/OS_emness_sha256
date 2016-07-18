@@ -1,0 +1,1 @@
+xst -intstyle ise -ifn "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/gv_sha256.xst" -ofn "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/gv_sha256.syr" 

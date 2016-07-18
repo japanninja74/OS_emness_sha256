@@ -1,0 +1,813 @@
+Release 14.7 - xst P.20131013 (nt64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.17 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.17 secs
+ 
+--> Reading design: gv_sha256.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Parsing
+  3) HDL Elaboration
+  4) HDL Synthesis
+       4.1) HDL Synthesis Report
+  5) Advanced HDL Synthesis
+       5.1) Advanced HDL Synthesis Report
+  6) Low Level Synthesis
+  7) Partition Report
+  8) Design Summary
+       8.1) Primitive and Black Box Usage
+       8.2) Device utilization summary
+       8.3) Partition Resource Summary
+       8.4) Timing Report
+            8.4.1) Clock Information
+            8.4.2) Asynchronous Control Signals Information
+            8.4.3) Timing Summary
+            8.4.4) Timing Details
+            8.4.5) Cross Clock Domains Report
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "gv_sha256.prj"
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "gv_sha256"
+Output Format                      : NGC
+Target Device                      : xc6slx45-2-csg324
+
+---- Source Options
+Top Module Name                    : gv_sha256
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+CASE Implementation Style          : Full-Parallel
+FSM Style                          : LUT
+RAM Extraction                     : No
+ROM Extraction                     : No
+Shift Register Extraction          : YES
+Resource Sharing                   : NO
+Asynchronous To Synchronous        : NO
+Shift Register Minimum Size        : 2
+Use DSP Block                      : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+LUT Combining                      : Auto
+Reduce Control Sets                : Auto
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 16
+Register Duplication               : NO
+Optimize Instantiated Primitives   : YES
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 2
+Power Reduction                    : NO
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : YES
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_regs.vhd" into library work
+Parsing entity <sha256_regs>.
+Parsing architecture <rtl> of entity <sha256_regs>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_padding.vhd" into library work
+Parsing entity <sha256_padding>.
+Parsing architecture <rtl> of entity <sha256_padding>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_msg_sch.vhd" into library work
+Parsing entity <sha256_msg_sch>.
+Parsing architecture <rtl> of entity <sha256_msg_sch>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_Kt_rom.vhd" into library work
+Parsing entity <sha256_kt_rom>.
+Parsing architecture <behavioral> of entity <sha256_kt_rom>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_Ki_rom.vhd" into library work
+Parsing entity <sha256_ki_rom>.
+Parsing architecture <behavioral> of entity <sha256_ki_rom>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_hash_core.vhd" into library work
+Parsing entity <sha256_hash_core>.
+Parsing architecture <rtl> of entity <sha256_hash_core>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_control.vhd" into library work
+Parsing entity <sha256_control>.
+Parsing architecture <rtl> of entity <sha256_control>.
+Parsing VHDL file "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\gv_sha256.vhd" into library work
+Parsing entity <gv_sha256>.
+Parsing architecture <rtl> of entity <gv_sha256>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+
+Elaborating entity <gv_sha256> (architecture <rtl>) from library <work>.
+
+Elaborating entity <sha256_control> (architecture <rtl>) from library <work>.
+INFO:HDLCompiler:679 - "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_control.vhd" Line 538. Case statement is complete. others clause is never selected
+
+Elaborating entity <sha256_padding> (architecture <rtl>) from library <work>.
+
+Elaborating entity <sha256_msg_sch> (architecture <rtl>) from library <work>.
+
+Elaborating entity <sha256_hash_core> (architecture <rtl>) from library <work>.
+
+Elaborating entity <sha256_regs> (architecture <rtl>) from library <work>.
+
+Elaborating entity <sha256_kt_rom> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <sha256_ki_rom> (architecture <behavioral>) from library <work>.
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Synthesizing Unit <gv_sha256>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\gv_sha256.vhd".
+    Summary:
+	no macro.
+Unit <gv_sha256> synthesized.
+
+Synthesizing Unit <sha256_control>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_control.vhd".
+    Found 1-bit register for signal <sha_last_blk_reg>.
+    Found 1-bit register for signal <padding_reg>.
+    Found 1-bit register for signal <bytes_error_reg>.
+    Found 64-bit register for signal <msg_bit_cnt_reg>.
+    Found 7-bit register for signal <st_cnt_reg>.
+    Found 1-bit register for signal <pad_one_reg>.
+    Found 3-bit register for signal <hash_control_st_reg>.
+    Found finite state machine <FSM_0> for signal <hash_control_st_reg>.
+    -----------------------------------------------------------------------
+    | States             | 7                                              |
+    | Transitions        | 27                                             |
+    | Inputs             | 10                                             |
+    | Outputs            | 11                                             |
+    | Clock              | clk_i (rising_edge)                            |
+    | Reset              | start_i (positive)                             |
+    | Reset type         | synchronous                                    |
+    | Reset State        | st_reset                                       |
+    | Power Up State     | st_reset                                       |
+    | Encoding           | auto                                           |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 64-bit adder for signal <msg_bit_cnt_next> created at line 595.
+    Found 7-bit adder for signal <st_cnt_next> created at line 1241.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+	inferred  75 D-type flip-flop(s).
+	inferred  23 Multiplexer(s).
+	inferred   1 Finite State Machine(s).
+Unit <sha256_control> synthesized.
+
+Synthesizing Unit <sha256_padding>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_padding.vhd".
+    Found 32-bit 4-to-1 multiplexer for signal <W_out> created at line 66.
+    Summary:
+	inferred   7 Multiplexer(s).
+Unit <sha256_padding> synthesized.
+
+Synthesizing Unit <sha256_msg_sch>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_msg_sch.vhd".
+    Found 32-bit register for signal <r1>.
+    Found 32-bit register for signal <r2>.
+    Found 32-bit register for signal <r3>.
+    Found 32-bit register for signal <r4>.
+    Found 32-bit register for signal <r5>.
+    Found 32-bit register for signal <r6>.
+    Found 32-bit register for signal <r7>.
+    Found 32-bit register for signal <r8>.
+    Found 32-bit register for signal <r9>.
+    Found 32-bit register for signal <r10>.
+    Found 32-bit register for signal <r11>.
+    Found 32-bit register for signal <r12>.
+    Found 32-bit register for signal <r13>.
+    Found 32-bit register for signal <r14>.
+    Found 32-bit register for signal <r15>.
+    Found 32-bit register for signal <r0>.
+    Found 32-bit adder for signal <sum0> created at line 150.
+    Found 32-bit adder for signal <sum1> created at line 151.
+    Found 32-bit adder for signal <sum2> created at line 152.
+    Summary:
+	inferred   3 Adder/Subtractor(s).
+	inferred 512 D-type flip-flop(s).
+	inferred   1 Multiplexer(s).
+Unit <sha256_msg_sch> synthesized.
+
+Synthesizing Unit <sha256_hash_core>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_hash_core.vhd".
+    Found 32-bit register for signal <reg_b>.
+    Found 32-bit register for signal <reg_c>.
+    Found 32-bit register for signal <reg_d>.
+    Found 32-bit register for signal <reg_e>.
+    Found 32-bit register for signal <reg_f>.
+    Found 32-bit register for signal <reg_g>.
+    Found 32-bit register for signal <reg_h>.
+    Found 32-bit register for signal <reg_a>.
+    Found 32-bit adder for signal <sum0> created at line 140.
+    Found 32-bit adder for signal <sum1> created at line 141.
+    Found 32-bit adder for signal <sum2> created at line 142.
+    Found 32-bit adder for signal <sum3> created at line 143.
+    Found 32-bit adder for signal <sum4> created at line 144.
+    Found 32-bit adder for signal <sum5> created at line 145.
+    Found 32-bit adder for signal <sum6> created at line 146.
+    Summary:
+	inferred   7 Adder/Subtractor(s).
+	inferred 256 D-type flip-flop(s).
+	inferred   8 Multiplexer(s).
+Unit <sha256_hash_core> synthesized.
+
+Synthesizing Unit <sha256_regs>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_regs.vhd".
+    Found 32-bit register for signal <reg_H1>.
+    Found 32-bit register for signal <reg_H2>.
+    Found 32-bit register for signal <reg_H3>.
+    Found 32-bit register for signal <reg_H4>.
+    Found 32-bit register for signal <reg_H5>.
+    Found 32-bit register for signal <reg_H6>.
+    Found 32-bit register for signal <reg_H7>.
+    Found 32-bit register for signal <reg_H0>.
+    Found 32-bit adder for signal <sum0> created at line 142.
+    Found 32-bit adder for signal <sum1> created at line 143.
+    Found 32-bit adder for signal <sum2> created at line 144.
+    Found 32-bit adder for signal <sum3> created at line 145.
+    Found 32-bit adder for signal <sum4> created at line 146.
+    Found 32-bit adder for signal <sum5> created at line 147.
+    Found 32-bit adder for signal <sum6> created at line 148.
+    Found 32-bit adder for signal <sum7> created at line 149.
+    Summary:
+	inferred   8 Adder/Subtractor(s).
+	inferred 256 D-type flip-flop(s).
+	inferred   8 Multiplexer(s).
+Unit <sha256_regs> synthesized.
+
+Synthesizing Unit <sha256_kt_rom>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_Kt_rom.vhd".
+    Summary:
+	no macro.
+Unit <sha256_kt_rom> synthesized.
+
+Synthesizing Unit <sha256_ki_rom>.
+    Related source file is "\\vmware-host\shared folders\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\sha256_Ki_rom.vhd".
+    Summary:
+	no macro.
+Unit <sha256_ki_rom> synthesized.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 20
+ 32-bit adder                                          : 18
+ 64-bit adder                                          : 1
+ 7-bit adder                                           : 1
+# Registers                                            : 38
+ 1-bit register                                        : 4
+ 32-bit register                                       : 32
+ 64-bit register                                       : 1
+ 7-bit register                                        : 1
+# Multiplexers                                         : 47
+ 1-bit 2-to-1 multiplexer                              : 20
+ 2-bit 2-to-1 multiplexer                              : 3
+ 32-bit 2-to-1 multiplexer                             : 17
+ 32-bit 4-to-1 multiplexer                             : 1
+ 4-bit 2-to-1 multiplexer                              : 2
+ 8-bit 2-to-1 multiplexer                              : 4
+# FSMs                                                 : 1
+# Xors                                                 : 11
+ 32-bit xor2                                           : 11
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+Synthesizing (advanced) Unit <sha256_control>.
+The following registers are absorbed into accumulator <msg_bit_cnt_reg>: 1 register on signal <msg_bit_cnt_reg>.
+The following registers are absorbed into counter <st_cnt_reg>: 1 register on signal <st_cnt_reg>.
+Unit <sha256_control> synthesized (advanced).
+
+Synthesizing (advanced) Unit <sha256_hash_core>.
+	The following adders/subtractors are grouped into adder tree <Madd_sum31> :
+ 	<Madd_sum6> in block <sha256_hash_core>, 	<Madd_sum5> in block <sha256_hash_core>, 	<Madd_sum4> in block <sha256_hash_core>, 	<Madd_sum3> in block <sha256_hash_core>.
+Unit <sha256_hash_core> synthesized (advanced).
+
+Synthesizing (advanced) Unit <sha256_msg_sch>.
+	The following adders/subtractors are grouped into adder tree <Madd_sum01> :
+ 	<Madd_sum2> in block <sha256_msg_sch>, 	<Madd_sum1> in block <sha256_msg_sch>, 	<Madd_sum0> in block <sha256_msg_sch>.
+Unit <sha256_msg_sch> synthesized (advanced).
+
+Synthesizing (advanced) Unit <sha256_regs>.
+The following registers are absorbed into accumulator <reg_H1>: 1 register on signal <reg_H1>.
+The following registers are absorbed into accumulator <reg_H0>: 1 register on signal <reg_H0>.
+The following registers are absorbed into accumulator <reg_H2>: 1 register on signal <reg_H2>.
+The following registers are absorbed into accumulator <reg_H4>: 1 register on signal <reg_H4>.
+The following registers are absorbed into accumulator <reg_H3>: 1 register on signal <reg_H3>.
+The following registers are absorbed into accumulator <reg_H5>: 1 register on signal <reg_H5>.
+The following registers are absorbed into accumulator <reg_H7>: 1 register on signal <reg_H7>.
+The following registers are absorbed into accumulator <reg_H6>: 1 register on signal <reg_H6>.
+Unit <sha256_regs> synthesized (advanced).
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 11
+ 32-bit adder                                          : 11
+# Adder Trees                                          : 2
+ 32-bit / 4-inputs adder tree                          : 1
+ 32-bit / 5-inputs adder tree                          : 1
+# Counters                                             : 1
+ 7-bit up counter                                      : 1
+# Accumulators                                         : 9
+ 32-bit up loadable accumulator                        : 8
+ 64-bit up accumulator                                 : 1
+# Registers                                            : 772
+ Flip-Flops                                            : 772
+# Multiplexers                                         : 47
+ 1-bit 2-to-1 multiplexer                              : 20
+ 2-bit 2-to-1 multiplexer                              : 3
+ 32-bit 2-to-1 multiplexer                             : 17
+ 32-bit 4-to-1 multiplexer                             : 1
+ 4-bit 2-to-1 multiplexer                              : 2
+ 8-bit 2-to-1 multiplexer                              : 4
+# FSMs                                                 : 1
+# Xors                                                 : 11
+ 32-bit xor2                                           : 11
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+Analyzing FSM <MFsm> for best encoding.
+Optimizing FSM <Inst_sha256_control/FSM_0> on signal <hash_control_st_reg[1:3]> with user encoding.
+--------------------------------
+ State              | Encoding
+--------------------------------
+ st_reset           | 000
+ st_sha_data_input  | 001
+ st_sha_blk_process | 010
+ st_sha_blk_nxt     | 011
+ st_sha_padding     | 100
+ st_sha_data_valid  | 101
+ st_error           | 110
+--------------------------------
+WARNING:Xst:1710 - FF/Latch <msg_bit_cnt_reg_0> (without init value) has a constant value of 0 in block <sha256_control>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <msg_bit_cnt_reg_1> (without init value) has a constant value of 0 in block <sha256_control>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <msg_bit_cnt_reg_2> (without init value) has a constant value of 0 in block <sha256_control>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <gv_sha256> ...
+
+Optimizing unit <sha256_control> ...
+
+Optimizing unit <sha256_msg_sch> ...
+
+Optimizing unit <sha256_hash_core> ...
+
+Optimizing unit <sha256_regs> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block gv_sha256, actual ratio is 7.
+
+Final Macro Processing ...
+
+Processing Unit <gv_sha256> :
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_31>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_30>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_29>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_28>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_27>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_26>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_25>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_24>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_23>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_22>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_21>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_20>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_19>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_18>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_17>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_16>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_15>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_14>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_13>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_12>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_11>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_10>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_9>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_8>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_7>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_6>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_5>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_4>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_3>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_2>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_1>.
+	Found 8-bit shift register for signal <Inst_sha256_msg_sch/r2_0>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_31>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_30>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_29>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_28>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_27>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_26>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_25>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_24>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_23>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_22>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_21>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_20>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_19>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_18>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_17>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_16>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_15>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_14>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_13>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_12>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_11>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_10>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_9>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_8>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_7>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_6>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_5>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_4>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_3>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_2>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_1>.
+	Found 5-bit shift register for signal <Inst_sha256_msg_sch/r10_0>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_31>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_30>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_29>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_28>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_27>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_26>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_25>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_24>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_23>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_22>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_21>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_20>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_19>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_18>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_17>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_16>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_15>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_14>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_13>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_12>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_11>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_10>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_9>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_8>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_7>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_6>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_5>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_4>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_3>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_2>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_1>.
+	Found 2-bit shift register for signal <Inst_sha256_msg_sch/r15_0>.
+Unit <gv_sha256> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 619
+ Flip-Flops                                            : 619
+# Shift Registers                                      : 96
+ 2-bit shift register                                  : 32
+ 5-bit shift register                                  : 32
+ 8-bit shift register                                  : 32
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Design Summary                             *
+=========================================================================
+
+Top Level Output File Name         : gv_sha256.ngc
+
+Primitive and Black Box Usage:
+------------------------------
+# BELS                             : 3216
+#      BUF                         : 1
+#      GND                         : 1
+#      INV                         : 1
+#      LUT1                        : 58
+#      LUT2                        : 306
+#      LUT3                        : 283
+#      LUT4                        : 414
+#      LUT5                        : 526
+#      LUT6                        : 118
+#      MUXCY                       : 742
+#      VCC                         : 1
+#      XORCY                       : 765
+# FlipFlops/Latches                : 715
+#      FDE                         : 640
+#      FDR                         : 5
+#      FDRE                        : 70
+# Shift Registers                  : 96
+#      SRLC16E                     : 96
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 297
+#      IBUF                        : 38
+#      OBUF                        : 259
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 6slx45csg324-2 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:             715  out of  54576     1%  
+ Number of Slice LUTs:                 1802  out of  27288     6%  
+    Number used as Logic:              1706  out of  27288     6%  
+    Number used as Memory:               96  out of   6408     1%  
+       Number used as SRL:               96
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:   1851
+   Number with an unused Flip Flop:    1136  out of   1851    61%  
+   Number with an unused LUT:            49  out of   1851     2%  
+   Number of fully used LUT-FF pairs:   666  out of   1851    35%  
+   Number of unique control sets:        10
+
+IO Utilization: 
+ Number of IOs:                         298
+ Number of bonded IOBs:                 298  out of    218   136% (*) 
+
+Specific Feature Utilization:
+ Number of BUFG/BUFGCTRLs:                1  out of     16     6%  
+
+WARNING:Xst:1336 -  (*) More than 100% of Device resources are used
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+Timing Report
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk_i                              | BUFGP                  | 811   |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -2
+
+   Minimum period: 13.436ns (Maximum Frequency: 74.427MHz)
+   Minimum input arrival time before clock: 11.977ns
+   Maximum output required time after clock: 10.089ns
+   Maximum combinational path delay: 9.732ns
+
+Timing Details:
+---------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk_i'
+  Clock period: 13.436ns (frequency: 74.427MHz)
+  Total number of paths / destination ports: 81257529 / 1687
+-------------------------------------------------------------------------
+Delay:               13.436ns (Levels of Logic = 37)
+  Source:            Inst_sha256_control/hash_control_st_reg_FSM_FFd1 (FF)
+  Destination:       Inst_sha256_hash_core/reg_a_31 (FF)
+  Source Clock:      clk_i rising
+  Destination Clock: clk_i rising
+
+  Data Path: Inst_sha256_control/hash_control_st_reg_FSM_FFd1 to Inst_sha256_hash_core/reg_a_31
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q            408   0.525   2.676  Inst_sha256_control/hash_control_st_reg_FSM_FFd1 (Inst_sha256_control/hash_control_st_reg_FSM_FFd1)
+     LUT5:I2->O            3   0.235   0.766  Inst_sha256_control/Mmux_sha_last_blk_next111_SW1 (N66)
+     LUT6:I5->O           15   0.254   1.263  Inst_sha256_control/Mmux_sha_last_blk_next112_1 (Inst_sha256_control/Mmux_sha_last_blk_next112)
+     LUT6:I4->O            1   0.250   0.682  Inst_sha256_msg_sch/Mmux_next_r026_SW0 (N54)
+     LUT6:I5->O            3   0.254   0.994  Inst_sha256_msg_sch/Mmux_next_r026 (Wt_data<3>)
+     LUT3:I0->O            1   0.235   0.682  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd33 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd33)
+     LUT4:I3->O            1   0.254   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_lut<0>4 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_lut<0>4)
+     MUXCY:S->O            1   0.215   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_3 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>4)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_4 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>5)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_5 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>6)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_6 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>7)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_7 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>8)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_8 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>9)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_9 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>10)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_10 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>11)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_11 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>12)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_12 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>13)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_13 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>14)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_14 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>15)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_15 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>16)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_16 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>17)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_17 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>18)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_18 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>19)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_19 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>20)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_20 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>21)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_21 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>22)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_22 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>23)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_23 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>24)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_24 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>25)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_25 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>26)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_26 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>27)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_27 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>28)
+     XORCY:CI->O           3   0.206   0.766  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_xor<0>_28 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd_293)
+     LUT3:I2->O            1   0.254   0.682  Inst_sha256_hash_core/Madd_sum029 (Inst_sha256_hash_core/Madd_sum029)
+     LUT4:I3->O            1   0.254   0.000  Inst_sha256_hash_core/Madd_sum0_lut<0>30 (Inst_sha256_hash_core/Madd_sum0_lut<0>30)
+     MUXCY:S->O            0   0.215   0.000  Inst_sha256_hash_core/Madd_sum0_cy<0>_29 (Inst_sha256_hash_core/Madd_sum0_cy<0>30)
+     XORCY:CI->O           1   0.206   0.682  Inst_sha256_hash_core/Madd_sum0_xor<0>_30 (Inst_sha256_hash_core/sum0<31>)
+     LUT5:I4->O            1   0.254   0.000  Inst_sha256_hash_core/Mmux_next_reg_a251 (Inst_sha256_hash_core/next_reg_a<31>)
+     FDE:D                     0.074          Inst_sha256_hash_core/reg_a_31
+    ----------------------------------------
+    Total                     13.436ns (4.243ns logic, 9.193ns route)
+                                       (31.6% logic, 68.4% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk_i'
+  Total number of paths / destination ports: 302797 / 716
+-------------------------------------------------------------------------
+Offset:              11.977ns (Levels of Logic = 32)
+  Source:            end_i (PAD)
+  Destination:       Inst_sha256_hash_core/reg_a_31 (FF)
+  Destination Clock: clk_i rising
+
+  Data Path: end_i to Inst_sha256_hash_core/reg_a_31
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            16   1.328   1.637  end_i_IBUF (end_i_IBUF)
+     LUT6:I0->O            8   0.254   1.172  Inst_sha256_control/Mmux_bytes_ena31 (bytes_ena<2>)
+     LUT6:I3->O            1   0.235   0.682  Inst_sha256_msg_sch/Mmux_next_r031_SW0 (N62)
+     LUT6:I5->O            3   0.254   0.994  Inst_sha256_msg_sch/Mmux_next_r031 (Wt_data<8>)
+     LUT3:I0->O            1   0.235   0.682  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd38 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd38)
+     LUT4:I3->O            1   0.254   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_lut<0>9 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_lut<0>9)
+     MUXCY:S->O            1   0.215   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_8 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>9)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_9 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>10)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_10 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>11)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_11 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>12)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_12 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>13)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_13 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>14)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_14 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>15)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_15 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>16)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_16 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>17)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_17 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>18)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_18 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>19)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_19 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>20)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_20 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>21)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_21 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>22)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_22 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>23)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_23 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>24)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_24 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>25)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_25 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>26)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_26 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>27)
+     MUXCY:CI->O           1   0.023   0.000  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>_27 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_cy<0>28)
+     XORCY:CI->O           3   0.206   0.766  Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd3_xor<0>_28 (Inst_sha256_hash_core/ADDERTREE_INTERNAL_Madd_293)
+     LUT3:I2->O            1   0.254   0.682  Inst_sha256_hash_core/Madd_sum029 (Inst_sha256_hash_core/Madd_sum029)
+     LUT4:I3->O            1   0.254   0.000  Inst_sha256_hash_core/Madd_sum0_lut<0>30 (Inst_sha256_hash_core/Madd_sum0_lut<0>30)
+     MUXCY:S->O            0   0.215   0.000  Inst_sha256_hash_core/Madd_sum0_cy<0>_29 (Inst_sha256_hash_core/Madd_sum0_cy<0>30)
+     XORCY:CI->O           1   0.206   0.682  Inst_sha256_hash_core/Madd_sum0_xor<0>_30 (Inst_sha256_hash_core/sum0<31>)
+     LUT5:I4->O            1   0.254   0.000  Inst_sha256_hash_core/Mmux_next_reg_a251 (Inst_sha256_hash_core/next_reg_a<31>)
+     FDE:D                     0.074          Inst_sha256_hash_core/reg_a_31
+    ----------------------------------------
+    Total                     11.977ns (4.680ns logic, 7.297ns route)
+                                       (39.1% logic, 60.9% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk_i'
+  Total number of paths / destination ports: 298 / 259
+-------------------------------------------------------------------------
+Offset:              10.089ns (Levels of Logic = 4)
+  Source:            Inst_sha256_control/hash_control_st_reg_FSM_FFd1 (FF)
+  Destination:       error_o (PAD)
+  Source Clock:      clk_i rising
+
+  Data Path: Inst_sha256_control/hash_control_st_reg_FSM_FFd1 to error_o
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q            408   0.525   2.676  Inst_sha256_control/hash_control_st_reg_FSM_FFd1 (Inst_sha256_control/hash_control_st_reg_FSM_FFd1)
+     LUT5:I2->O            3   0.235   0.766  Inst_sha256_control/Mmux_sha_last_blk_next111_SW1 (N66)
+     LUT6:I5->O           17   0.254   1.664  Inst_sha256_control/Mmux_sha_last_blk_next112 (words_sel<0>)
+     LUT6:I0->O            4   0.254   0.803  Inst_sha256_control/out_error (error_o_OBUF)
+     OBUF:I->O                 2.912          error_o_OBUF (error_o)
+    ----------------------------------------
+    Total                     10.089ns (4.180ns logic, 5.909ns route)
+                                       (41.4% logic, 58.6% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 9 / 1
+-------------------------------------------------------------------------
+Delay:               9.732ns (Levels of Logic = 5)
+  Source:            end_i (PAD)
+  Destination:       error_o (PAD)
+
+  Data Path: end_i to error_o
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            16   1.328   1.637  end_i_IBUF (end_i_IBUF)
+     LUT6:I0->O            8   0.254   1.399  Inst_sha256_control/Mmux_bytes_ena21 (bytes_ena<1>)
+     LUT6:I0->O            1   0.254   0.910  Inst_sha256_control/out_error_SW0 (N8)
+     LUT6:I3->O            4   0.235   0.803  Inst_sha256_control/out_error (error_o_OBUF)
+     OBUF:I->O                 2.912          error_o_OBUF (error_o)
+    ----------------------------------------
+    Total                      9.732ns (4.983ns logic, 4.749ns route)
+                                       (51.2% logic, 48.8% route)
+
+=========================================================================
+
+Cross Clock Domains Report:
+--------------------------
+
+Clock to Setup on destination clock clk_i
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+clk_i          |   13.436|         |         |         |
+---------------+---------+---------+---------+---------+
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 18.00 secs
+Total CPU time to Xst completion: 18.29 secs
+ 
+--> 
+
+Total memory usage is 267016 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    4 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

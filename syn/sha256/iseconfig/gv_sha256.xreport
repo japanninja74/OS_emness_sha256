@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2016-07-18T17:49:06</DateModified>
+  <DateModified>2016-07-18T19:37:17</DateModified>
   <ModuleName>gv_sha256</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
-  <SavedFilePath>Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/iseconfig/gv_sha256.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256\</ImplementationReportsDirectory>
+  <SavedFilePath>Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/iseconfig/gv_sha256.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256\</ImplementationReportsDirectory>
   <DateInitialized>2016-05-24T02:29:42</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
