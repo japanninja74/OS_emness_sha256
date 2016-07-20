@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------------------------------------------------
--- Author:          Jonny Doin, jdoin@opencores.org, jonnydoin@gmail.com
+-- Author:          Jonny Doin, jdoin@opencores.org, jonnydoin@gmail.com, jonnydoin@gridvortex.com
 -- 
--- Create Date:     09:56:30 07/06/2011  
+-- Create Date:     09:56:30 05/06/2016  
 -- Module Name:     sha256_msg_sch - RTL
 -- Project Name:    sha256 processor
 -- Target Devices:  Spartan-6
@@ -12,11 +12,27 @@
 --
 ------------------------------ COPYRIGHT NOTICE -----------------------------------------------------------------------
 --                                                                   
+--      This file is part of the SHA256 HASH CORE project http://opencores.org/project,sha256_hash_core
 --                                                                   
---      Author(s):      Jonny Doin, jonnydoin@gridvortex.com, jonnydoin@gmail.com
+--      Author(s):      Jonny Doin, jdoin@opencores.org, jonnydoin@gridvortex.com, jonnydoin@gmail.com
 --                                                                   
---      Copyright (C) 2016 GridVortex, All Rights Reserved
---      --------------------------------------------------
+--      Copyright (C) 2016 Jonny Doin
+--      -----------------------------
+--                                                                   
+--      This source file may be used and distributed without restriction provided that this copyright statement is not    
+--      removed from the file and that any derivative work contains the original copyright notice and the associated 
+--      disclaimer. 
+--                                                                   
+--      This source file is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+--      General Public License as published by the Free Software Foundation; either version 2.1 of the License, or 
+--      (at your option) any later version.
+--                                                                   
+--      This source is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+--      warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more  
+--      details.
+--
+--      You should have received a copy of the GNU Lesser General Public License along with this source; if not, download 
+--      it from http://www.gnu.org/licenses/lgpl.txt
 --                                                                   
 ------------------------------ REVISION HISTORY -----------------------------------------------------------------------
 --

@@ -1,17 +1,17 @@
-Running: C:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -lib secureip -o Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/testbench_isim_beh.exe -prj Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/testbench_beh.prj work.testbench 
+Running: C:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -lib secureip -o Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/testbench_isim_beh.exe -prj Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/testbench_beh.prj work.testbench 
 ISim P.20131013 (signature 0x7708f090)
 Number of CPUs detected in this system: 1
 Turning on mult-threading, number of parallel sub-compilation jobs: 0 
 Determining compilation order of HDL files
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_regs.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_padding.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_msg_sch.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_Kt_rom.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_Ki_rom.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_hash_core.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_control.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/gv_sha256.vhd" into library work
-Parsing VHDL file "Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_test.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_regs.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_padding.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_msg_sch.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_Kt_rom.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_Ki_rom.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_hash_core.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_control.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/gv_sha256.vhd" into library work
+Parsing VHDL file "Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_test.vhd" into library work
 Starting static elaboration
 Completed static elaboration
 Compiling package standard
@@ -28,6 +28,6 @@ Compiling architecture rtl of entity gv_sha256 [gv_sha256_default]
 Compiling architecture behavior of entity testbench
 Time Resolution for simulation is 1ps.
 Compiled 20 VHDL Units
-Built simulation executable Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/testbench_isim_beh.exe
-Fuse Memory Usage: 35780 KB
-Fuse CPU Usage: 1279 ms
+Built simulation executable Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/testbench_isim_beh.exe
+Fuse Memory Usage: 35880 KB
+Fuse CPU Usage: 1263 ms

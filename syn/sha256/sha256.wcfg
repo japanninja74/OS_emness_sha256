@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="Z:/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/testbench_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/testbench_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />

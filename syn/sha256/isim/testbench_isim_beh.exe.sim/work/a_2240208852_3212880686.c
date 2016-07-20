@@ -21,7 +21,7 @@
 #include <malloc.h>
 #define alloca _alloca
 #endif
-static const char *ng0 = "//vmware-host/Shared Folders/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/sha256_Ki_rom.vhd";
+static const char *ng0 = "//vmware-host/Shared Folders/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/sha256_Ki_rom.vhd";
 
 
 
@@ -34,9 +34,9 @@ static void work_a_2240208852_3212880686_p_0(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(58, ng0);
+LAB0:    xsi_set_current_line(74, ng0);
 
-LAB3:    t1 = (t0 + 9376);
+LAB3:    t1 = (t0 + 9844);
     t3 = (t0 + 5432);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -60,9 +60,9 @@ static void work_a_2240208852_3212880686_p_1(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(59, ng0);
+LAB0:    xsi_set_current_line(75, ng0);
 
-LAB3:    t1 = (t0 + 9408);
+LAB3:    t1 = (t0 + 9876);
     t3 = (t0 + 5496);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -86,9 +86,9 @@ static void work_a_2240208852_3212880686_p_2(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(60, ng0);
+LAB0:    xsi_set_current_line(76, ng0);
 
-LAB3:    t1 = (t0 + 9440);
+LAB3:    t1 = (t0 + 9908);
     t3 = (t0 + 5560);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -112,9 +112,9 @@ static void work_a_2240208852_3212880686_p_3(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(61, ng0);
+LAB0:    xsi_set_current_line(77, ng0);
 
-LAB3:    t1 = (t0 + 9472);
+LAB3:    t1 = (t0 + 9940);
     t3 = (t0 + 5624);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -138,9 +138,9 @@ static void work_a_2240208852_3212880686_p_4(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(62, ng0);
+LAB0:    xsi_set_current_line(78, ng0);
 
-LAB3:    t1 = (t0 + 9504);
+LAB3:    t1 = (t0 + 9972);
     t3 = (t0 + 5688);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -164,9 +164,9 @@ static void work_a_2240208852_3212880686_p_5(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(63, ng0);
+LAB0:    xsi_set_current_line(79, ng0);
 
-LAB3:    t1 = (t0 + 9536);
+LAB3:    t1 = (t0 + 10004);
     t3 = (t0 + 5752);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -190,9 +190,9 @@ static void work_a_2240208852_3212880686_p_6(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(64, ng0);
+LAB0:    xsi_set_current_line(80, ng0);
 
-LAB3:    t1 = (t0 + 9568);
+LAB3:    t1 = (t0 + 10036);
     t3 = (t0 + 5816);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);
@@ -216,9 +216,9 @@ static void work_a_2240208852_3212880686_p_7(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(65, ng0);
+LAB0:    xsi_set_current_line(81, ng0);
 
-LAB3:    t1 = (t0 + 9600);
+LAB3:    t1 = (t0 + 10068);
     t3 = (t0 + 5880);
     t4 = (t3 + 56U);
     t5 = *((char **)t4);

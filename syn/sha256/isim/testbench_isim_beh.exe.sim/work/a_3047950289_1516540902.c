@@ -21,7 +21,7 @@
 #include <malloc.h>
 #define alloca _alloca
 #endif
-static const char *ng0 = "//vmware-host/Shared Folders/Dropbox/develop/fpga/sha_256/trunk/syn/sha256/gv_sha256.vhd";
+static const char *ng0 = "//vmware-host/Shared Folders/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/gv_sha256.vhd";
 
 
 
@@ -36,7 +36,7 @@ static void work_a_3047950289_1516540902_p_0(char *t0)
     char *t7;
     char *t8;
 
-LAB0:    xsi_set_current_line(305, ng0);
+LAB0:    xsi_set_current_line(321, ng0);
 
 LAB3:    t1 = (t0 + 11752U);
     t2 = *((char **)t1);
@@ -68,7 +68,7 @@ static void work_a_3047950289_1516540902_p_1(char *t0)
     char *t7;
     char *t8;
 
-LAB0:    xsi_set_current_line(306, ng0);
+LAB0:    xsi_set_current_line(322, ng0);
 
 LAB3:    t1 = (t0 + 11432U);
     t2 = *((char **)t1);
@@ -99,7 +99,7 @@ static void work_a_3047950289_1516540902_p_2(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(307, ng0);
+LAB0:    xsi_set_current_line(323, ng0);
 
 LAB3:    t1 = (t0 + 7752U);
     t2 = *((char **)t1);
@@ -129,7 +129,7 @@ static void work_a_3047950289_1516540902_p_3(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(308, ng0);
+LAB0:    xsi_set_current_line(324, ng0);
 
 LAB3:    t1 = (t0 + 7912U);
     t2 = *((char **)t1);
@@ -159,7 +159,7 @@ static void work_a_3047950289_1516540902_p_4(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(309, ng0);
+LAB0:    xsi_set_current_line(325, ng0);
 
 LAB3:    t1 = (t0 + 8072U);
     t2 = *((char **)t1);
@@ -189,7 +189,7 @@ static void work_a_3047950289_1516540902_p_5(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(310, ng0);
+LAB0:    xsi_set_current_line(326, ng0);
 
 LAB3:    t1 = (t0 + 8232U);
     t2 = *((char **)t1);
@@ -219,7 +219,7 @@ static void work_a_3047950289_1516540902_p_6(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(311, ng0);
+LAB0:    xsi_set_current_line(327, ng0);
 
 LAB3:    t1 = (t0 + 8392U);
     t2 = *((char **)t1);
@@ -249,7 +249,7 @@ static void work_a_3047950289_1516540902_p_7(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(312, ng0);
+LAB0:    xsi_set_current_line(328, ng0);
 
 LAB3:    t1 = (t0 + 8552U);
     t2 = *((char **)t1);
@@ -279,7 +279,7 @@ static void work_a_3047950289_1516540902_p_8(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(313, ng0);
+LAB0:    xsi_set_current_line(329, ng0);
 
 LAB3:    t1 = (t0 + 8712U);
     t2 = *((char **)t1);
@@ -309,7 +309,7 @@ static void work_a_3047950289_1516540902_p_9(char *t0)
     char *t6;
     char *t7;
 
-LAB0:    xsi_set_current_line(314, ng0);
+LAB0:    xsi_set_current_line(330, ng0);
 
 LAB3:    t1 = (t0 + 8872U);
     t2 = *((char **)t1);

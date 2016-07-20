@@ -2,14 +2,14 @@ Command line:
    testbench_isim_beh.exe
      -simmode  gui
      -simrunnum  0
-     -socket  49356
+     -socket  51486
 
-Mon Jul 18 17:49:39 2016
+Wed Jul 20 01:53:44 2016
 
 
- Elaboration Time: 0.1248 sec
+ Elaboration Time: 0.109202 sec
 
- Current Memory Usage: 666.833 Meg
+ Current Memory Usage: 670.986 Meg
 
  Total Signals          : 332
  Total Nets             : 4776
@@ -19,17 +19,11 @@ Mon Jul 18 17:49:39 2016
  Total Processes        : 161
  Total Traceable Variables  : 16
  Total Scalar Nets and Variables : 5262
-Total Line Count : 924
+Total Line Count : 916
 
-** Failure:End Simulation
-User(VHDL) Code Called Simulation Stop
-In process sha256_test.vhd:tb1 
- 
+ Total Simulation Time: 58.1884 sec
 
+ Current Memory Usage: 670.986 Meg
 
- Total Simulation Time: 139.917 sec
-
- Current Memory Usage: 666.833 Meg
-
-Mon Jul 18 17:53:03 2016
+Wed Jul 20 01:56:18 2016
 
