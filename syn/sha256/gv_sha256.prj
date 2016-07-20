@@ -1,8 +1,0 @@
-vhdl work "sha256_regs.vhd"
-vhdl work "sha256_padding.vhd"
-vhdl work "sha256_msg_sch.vhd"
-vhdl work "sha256_Kt_rom.vhd"
-vhdl work "sha256_Ki_rom.vhd"
-vhdl work "sha256_hash_core.vhd"
-vhdl work "sha256_control.vhd"
-vhdl work "gv_sha256.vhd"
