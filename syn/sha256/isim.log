@@ -1,0 +1,20 @@
+ISim log file
+Running: Z:\Dropbox\develop\fpga\sha256_hash_core\sha256_hash_core\trunk\syn\sha256\testbench_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb Z:/Dropbox/develop/fpga/sha256_hash_core/sha256_hash_core/trunk/syn/sha256/testbench_isim_beh.wdb 
+ISim P.20131013 (signature 0x7708f090)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+Time resolution is 1 ps
+# onerror resume
+# wave add /
+# run all
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /testbench/Inst_sha_256_dut/Inst_sha256_kt_rom/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+Finished circuit initialization process.
+
+** Failure:End Simulation
+User(VHDL) Code Called Simulation Stop
+In process sha256_test.vhd:tb1 
+ 
+INFO: Simulator is stopped.

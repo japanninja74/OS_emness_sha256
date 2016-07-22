@@ -55,14 +55,14 @@ use ieee.numeric_std.all;
 
 entity sha256_ki_rom is
     port (  
-        K0_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K1_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K2_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K3_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K4_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K5_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K6_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        K7_o : out std_logic_vector (31 downto 0) := (others => 'X')
+        K0_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K1_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K2_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K3_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K4_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K5_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K6_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        K7_o : out std_logic_vector (31 downto 0) := (others => 'U')
     );                      
 end sha256_ki_rom;
 

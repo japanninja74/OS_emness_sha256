@@ -57,11 +57,11 @@ use ieee.numeric_std.all;
 
 entity sha256_padding is
     port (
-        words_sel_i : in std_logic_vector (1 downto 0) := (others => 'X');      -- selector for bitcnt insertion at the last block
+        words_sel_i : in std_logic_vector (1 downto 0) := (others => 'U');      -- selector for bitcnt insertion at the last block
         one_insert_i : in std_logic;                                            -- insert a leading one in the padding
-        bytes_ena_i : in std_logic_vector (3 downto 0) := (others => 'X');      -- byte lane selector lines
-        bitlen_i : in std_logic_vector (63 downto 0) := (others => 'X');        -- 64bit message bit length
-        di_i : in std_logic_vector (31 downto 0) := (others => 'X');            -- big endian input message words
+        bytes_ena_i : in std_logic_vector (3 downto 0) := (others => 'U');      -- byte lane selector lines
+        bitlen_i : in std_logic_vector (63 downto 0) := (others => 'U');        -- 64bit message bit length
+        di_i : in std_logic_vector (31 downto 0) := (others => 'U');            -- big endian input message words
         do_o : out std_logic_vector (31 downto 0);                              -- padded output words
         error_o : out std_logic                                                 -- '1' if error in the byte_ena selectors
     );

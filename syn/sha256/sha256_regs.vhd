@@ -54,41 +54,41 @@ use ieee.numeric_std.all;
 
 entity sha256_regs is
     port (  
-        clk_i : in std_logic := 'X';                                            -- system clock
-        ce_i : in std_logic := 'X';                                             -- clock enable from control logic
-        ld_i : in std_logic := 'X';                                             -- internal mux selection from control logic
-        A_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        B_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        C_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        D_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        E_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        F_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        G_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        H_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K0_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K1_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K2_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K3_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K4_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K5_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K6_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        K7_i : in std_logic_vector (31 downto 0) := (others => 'X');
-        N0_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N1_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N2_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N3_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N4_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N5_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N6_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        N7_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H0_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H1_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H2_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H3_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H4_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H5_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H6_o : out std_logic_vector (31 downto 0) := (others => 'X');
-        H7_o : out std_logic_vector (31 downto 0) := (others => 'X')
+        clk_i : in std_logic := 'U';                                            -- system clock
+        ce_i : in std_logic := 'U';                                             -- clock enable from control logic
+        ld_i : in std_logic := 'U';                                             -- internal mux selection from control logic
+        A_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        B_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        C_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        D_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        E_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        F_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        G_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        H_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K0_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K1_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K2_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K3_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K4_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K5_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K6_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        K7_i : in std_logic_vector (31 downto 0) := (others => 'U');
+        N0_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N1_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N2_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N3_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N4_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N5_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N6_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        N7_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H0_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H1_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H2_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H3_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H4_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H5_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H6_o : out std_logic_vector (31 downto 0) := (others => 'U');
+        H7_o : out std_logic_vector (31 downto 0) := (others => 'U')
     );                      
 end sha256_regs;
 
@@ -103,23 +103,23 @@ architecture rtl of sha256_regs is
     signal reg_H6 : unsigned (31 downto 0) := (others => '0');
     signal reg_H7 : unsigned (31 downto 0) := (others => '0');
     -- word shifter wires
-    signal next_reg_H0 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H1 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H2 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H3 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H4 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H5 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H6 : unsigned (31 downto 0) := (others => '0');
-    signal next_reg_H7 : unsigned (31 downto 0) := (others => '0');
+    signal next_reg_H0 : unsigned (31 downto 0);
+    signal next_reg_H1 : unsigned (31 downto 0);
+    signal next_reg_H2 : unsigned (31 downto 0);
+    signal next_reg_H3 : unsigned (31 downto 0);
+    signal next_reg_H4 : unsigned (31 downto 0);
+    signal next_reg_H5 : unsigned (31 downto 0);
+    signal next_reg_H6 : unsigned (31 downto 0);
+    signal next_reg_H7 : unsigned (31 downto 0);
     -- internal modulo adders
-    signal sum0 : unsigned (31 downto 0) := (others => '0');
-    signal sum1 : unsigned (31 downto 0) := (others => '0');
-    signal sum2 : unsigned (31 downto 0) := (others => '0');
-    signal sum3 : unsigned (31 downto 0) := (others => '0');
-    signal sum4 : unsigned (31 downto 0) := (others => '0');
-    signal sum5 : unsigned (31 downto 0) := (others => '0');
-    signal sum6 : unsigned (31 downto 0) := (others => '0');
-    signal sum7 : unsigned (31 downto 0) := (others => '0');
+    signal sum0 : unsigned (31 downto 0);
+    signal sum1 : unsigned (31 downto 0);
+    signal sum2 : unsigned (31 downto 0);
+    signal sum3 : unsigned (31 downto 0);
+    signal sum4 : unsigned (31 downto 0);
+    signal sum5 : unsigned (31 downto 0);
+    signal sum6 : unsigned (31 downto 0);
+    signal sum7 : unsigned (31 downto 0);
 begin
     --=============================================================================================
     -- OUTPUT RESULT REGISTERS LOGIC
