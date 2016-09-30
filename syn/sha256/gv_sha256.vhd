@@ -68,6 +68,7 @@
 -- 2016/06/07   v0.01.0105  [JD]    verification against all NIST-FIPS-180-4 test vectors passed.
 -- 2016/06/11   v0.01.0105  [JD]    verification against NIST-SHA2_Additional test vectors #1 to #10 passed.
 -- 2016/06/11   v0.01.0110  [JD]    optimized controller states, reduced 2 clocks per block, added lookahead register feedback.
+-- 2016/09/25   v0.01.0220  [JD]    changed 'di_ack_i' name to 'di_wr_i', and changed semantics to 'data write'.
 --
 --
 -----------------------------------------------------------------------------------------------------------------------
@@ -89,7 +90,7 @@ entity gv_sha256 is
         end_i : in std_logic := 'U';                                    -- marks end of last block data input
         -- handshake
         di_req_o : out std_logic;                                       -- requests data input for next word
-        di_ack_i : in std_logic := 'U';                                 -- high for di_i valid, low for hold
+        di_wr_i : in std_logic := 'U';                                  -- high for di_i valid, low for hold
         error_o : out std_logic;                                        -- signalizes error. output data is invalid
         do_valid_o : out std_logic;                                     -- when high, the output is valid
         -- 256bit output registers
@@ -177,7 +178,7 @@ begin
             clk_i           => clk_i,
             ce_i            => ce_i,
             bytes_i         => bytes_i,
-            ack_i           => di_ack_i,
+            wr_i            => di_wr_i,
             start_i         => start_i,
             end_i           => end_i,
             error_i         => error_pad,

@@ -43,7 +43,7 @@
 --      The engine is internally implemented as a 256-bit machine, with all combinational operations performed as a single-cycle operation on each
 --      64 steps of the hash algorithm. Wide transfers of 256-bit data are also performed as single-cycle operations. 
 --
---      The data input accepts 16 consecutive 32bit words for a total of 64 bytes per block, one word per clock cycle. The input signal 'ack_i' can be
+--      The data input accepts 16 consecutive 32bit words for a total of 64 bytes per block, one word per clock cycle. The input signal 'wr_i' can be
 --      used as a flow control input to hold the processor to wait for slower data.
 --
 --      A hash computation starts with a 'start_i' pulse that resets the processor. A pulse of the 'end_i' signal marks the last input data word. The
@@ -72,7 +72,7 @@
 --                 __ _ _ _       _____________________________________________________________________________________________________                  
 --      di_req_o   __ _ _ _\_____/                                                                                                     \_______________...     -- 'di_req_o' asserted during data input
 --                            ___________________________________________       _________________________________________________________                
---      ack_i      __________/____/                                      \_____/                                                         \_____________...     -- 'ack_i' can hold the core for slow data
+--      wr_i       __________/____/                                      \_____/                                                         \_____________...     -- 'wr_i' can hold the core for slow data
 --                 __________ _________ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ ______ ______________...
 --      di_i       __________\___\_W0__\__W1_\__W2_\__W3_\__W4_\__W5_\\\\\\\__W6_\__W7_\__W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15__\______X_______...     -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 ____________________ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ _____________________...
@@ -100,7 +100,7 @@
 --                                      _____________________________________________________________________________________________________       
 --      di_req_o   ____________________/                                                                                                     \___...        -- 'di_req_o' asserted during data input
 --                          ___________________________________________________       _________________________________________________________     
---      ack_i      ________/__________/                                        \_____/                                                         \_...        -- 'ack_i' can hold the core for slow data
+--      wr_i       ________/__________/                                        \_____/                                                         \_...        -- 'wr_i' can hold the core for slow data
 --                 _________________ _ ______ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ _____ ____...
 --      di_i       _________________\\\___W0_\__W1_\__W2_\__W3_\__W4_\__W5_\\\\\\\\_W6_\__W7_\__W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15_\\_X_...       -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 
@@ -118,7 +118,7 @@
 --                          _______ _ _ ___________________________________________________________________________________________________________      
 --      di_req_o   ________/                                                                                                                       \___...     -- 'di_req_o' asserted during data input
 --                                             __________________________________________________       _____________________________________________    
---      ack_i      ________________ _ _ ______/                                                  \_____/                                             \_...     -- 'ack_i' valid on rising edge of 'clk_i'
+--      wr_i       ________________ _ _ ______/                                                  \_____/                                             \_...     -- 'wr_i' valid on rising edge of 'clk_i'
 --                 ________________ _ _ ___________ _____ _____ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ ____...
 --      di_i       ________________ _ _ ______\_W0_\__W1_\__W2_\__W3_\__W4_\__W5_\__W6_\__W7_\\\\\\\__W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15_\\_Z_...     -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 
@@ -141,7 +141,7 @@
 --                          ___________________________________                                                                         __________  
 --      di_req_o   ________/                                   \__________ _ _ ___________________ _ _ ________________________________/          ...     -- 'di_req_o' asserted during data input
 --                           ______________________________________                                                                      _________  
---      ack_i      _________/                                    \\\______ _ _ ___________________ _ _ _________________________________/         ...     -- 'ack_i' can hold the core for slow data
+--      wr_i       _________/                                    \\\______ _ _ ___________________ _ _ _________________________________/         ...     -- 'wr_i' can hold the core for slow data
 --                 ______________ _____ _____ _____ _____ _____ __________ _ _ ___________________ _ _ ______________________________________ ____...
 --      di_i       _________\_W0_\__W1_\__W2_\__W3_\__W4_\__W5_\__________ _ _ ___________________ _ _ _________________________________\_W0_\__W1...     -- words after the end_i assertion are ignored
 --                 __ _____ _____ _____ _____ _____ _____ _____ _____ ____ _ ____ _____ _____ ____ _ _ ______________________________________ ____
@@ -186,7 +186,7 @@
 --                 _________________                                                                                     __________  
 --      di_req_o                    \__________ _ _ ___________________ _ _ _____________ _ _ __________________________/          ...     -- 'di_req_o' asserted on rising edge of 'clk_i'
 --                 ____________________                                                                                   _________  
---      ack_i                        \\\_______ _ _ ___________________ _ _ _____________ _ _ ___________________________/         ...     -- 'ack_i' valid on rising edge of 'clk_i'
+--      wr_i                         \\\_______ _ _ ___________________ _ _ _____________ _ _ ___________________________/         ...     -- 'wr_i' valid on rising edge of 'clk_i'
 --                 _____ _____ _____ __________ _ _ ___________________ _ _ _____________ _ _ ________________________________ ____...
 --      di_i       _W13_\_W14_\_W15_\__________ _ _ ___________________ _ _ _____________ _ _ ___________________________\_W0_\__W1...     -- words after the end_i assertion are ignored
 --                 _____ _____ _____ _____ ____ _ ____ _____ _____ ____ _ _ ________ ____ _ ____ _____ _______________________ ____
@@ -233,6 +233,7 @@
 -- 2016/06/11   v0.01.0110  [JD]    optimized controller states, reduced 2 clocks per block. 
 -- 2016/06/18   v0.01.0120  [JD]    implemented error detection on 'bytes_i' input.
 -- 2016/07/06   v0.01.0210  [JD]    optimized suspend logic on 'sch_ld' to supress possible glitch in 'pad_one_next'.
+-- 2016/09/25   v0.01.0220  [JD]    changed 'ack_i' name to 'wr_i', and changed semantics to 'data write'.
 --
 -----------------------------------------------------------------------------------------------------------------------
 --  TODO
@@ -251,7 +252,7 @@ entity sha256_control is
         ce_i : in std_logic := 'U';                                     -- core clock enable
         start_i : in std_logic := 'U';                                  -- reset the processor and start a new hash
         end_i : in std_logic := 'U';                                    -- marks end of last block data input
-        ack_i : in std_logic := 'U';                                    -- input word hold control
+        wr_i  : in std_logic := 'U';                                    -- input word write/hold control
         bytes_i : in std_logic_vector (1 downto 0) := (others => 'U');  -- valid bytes in input word
         error_i : in std_logic := 'U';                                  -- datapath error input from other modules
         -- output control signals
@@ -335,8 +336,10 @@ architecture rtl of sha256_control is
     signal bytes_ena : std_logic_vector (3 downto 0);   -- byte lane selectors for padding logic block
     signal one_insert : std_logic;                      -- insert leading one in the padding
     signal di_req : std_logic;                          -- data request
+    signal di_wr_window : std_logic;                    -- valid data write window    
     signal data_valid : std_logic;                      -- operation finished. output data is valid
     signal core_error : std_logic;                      -- operation aborted. output data is not valid
+    signal data_input_error : std_logic;                -- internal error signal for data write    
     signal out_error : std_logic;                       -- operation aborted. output data is not valid
     
 begin
@@ -352,6 +355,7 @@ begin
                 -- all registered values are reset on master clear
                 hash_control_st_reg <= st_reset;
             elsif out_error = '1' then
+                -- error latch: lock on the error state            
                 hash_control_st_reg <= st_error;
             elsif ce_i = '1' then
                 -- all registered values are held on master clock enable
@@ -439,6 +443,7 @@ begin
         -- handshaking
         sha_init <= '0';
         core_error <= '0';
+        di_wr_window <= '0';        
         words_sel <= b"00";
         data_valid <= '0';
         di_req <= '0';              -- data request only during data input
@@ -464,12 +469,14 @@ begin
                 core_ld <= '1';             -- load initial value into core registers
                 core_ce <= '1';             -- latch initial value into core registers
                 st_cnt_clr <= '1';          -- reset state counter
+                di_wr_window <= '1';        -- enable data write window                
                 -- next state
                 hash_control_st_next <= st_sha_data_input;
 
             when st_sha_data_input =>       -- message data words are clocked into the processor
                 -- moore outputs
                 di_req <= '1';              -- request message data
+                di_wr_window <= '1';        -- enable data write window                
                 sch_ce <= wait_run_ce;      -- hold the message scheduler with data hold
                 st_cnt_ce <= wait_run_ce;   -- hold state count with data hold
                 core_ce <= wait_run_ce;     -- hold processing clock with data hold
@@ -611,8 +618,8 @@ begin
         msg_bit_cnt_next <= msg_bit_cnt_reg + bits_to_add;
     end process msg_bit_cnt_next_combi_proc;
 
-    -- data input wait/run: insert wait states during data input for 'ack_i' = '0'
-    wait_run_proc:          wait_run_ce <= '1' when di_req = '1' and ack_i = '1' else '0';
+    -- data input wait/run: insert wait states during data input for 'wr_i' = '0'
+    wait_run_proc:          wait_run_ce <= '1' when di_req = '1' and wr_i  = '1' else '0';
 
     -- padding one-insertion control
     one_insert_proc:        one_insert <= '1' when pad_one_reg = '1' else '0';
@@ -624,10 +631,13 @@ begin
     st_cnt_next_proc:       st_cnt_next <= st_cnt_reg + 1;
 
     -- bytes_i error logic
-    bytes_error_proc:       bytes_error_next <= '1' when bytes_i /= b"00" and end_i /= '1' and di_req = '1' and ack_i = '1' else bytes_error_reg;
+    bytes_error_proc:       bytes_error_next <= '1' when bytes_i /= b"00" and end_i /= '1' and di_req = '1' and wr_i  = '1' else bytes_error_reg;
+
+    -- data input error logic
+    data_input_error_proc:  data_input_error <= '1' when wr_i = '1' and di_wr_window /= '1' else '0';
 
     -- error detection logic
-    out_error_combi_proc:   out_error <= '1' when error_i = '1' or core_error = '1' or bytes_error_reg = '1' else '0';
+    out_error_combi_proc:   out_error <= '1' when error_i = '1' or core_error = '1' or bytes_error_reg = '1' or data_input_error = '1' else '0';
     
     --=============================================================================================
     --  OUTPUT LOGIC PROCESSES

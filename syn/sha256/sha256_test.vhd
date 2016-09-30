@@ -13,6 +13,8 @@
 --      and tests the GV_SHA256 engine with the NIST SHA256 test vectors, including the additional NIST test vectors up to the 
 --      1 million chars.
 --
+--      The logic implements a fast engine, with 66 cycles per 512-bit block. 
+--
 --      The following waveforms describe the operation of the engine control signals for message start, update and end.
 --
 --      BEGIN BLOCK (1st block)
@@ -35,7 +37,7 @@
 --                 __ _ _ _       _____________________________________________________________________________________________________                  
 --      di_req_o   __ _ _ _\_____/                                                                                                     \_______________...     -- 'di_req_o' asserted during data input
 --                            ___________________________________________       _________________________________________________________                
---      ack_i      __________/____/                                      \_____/                                                         \_____________...     -- 'ack_i' can hold the core for slow data
+--      wr_i       __________/____/                                      \_____/                                                         \_____________...     -- 'wr_i' can hold the core for slow data
 --                 __________ _________ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ ______ ______________...
 --      di_i       __________\___\_W0__\__W1_\__W2_\__W3_\__W4_\__W5_\\\\\\\__W6_\__W7_\__W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15__\______X_______...     -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 ____________________ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ _____________________...
@@ -63,7 +65,7 @@
 --                                      _____________________________________________________________________________________________________       
 --      di_req_o   ____________________/                                                                                                     \___...        -- 'di_req_o' asserted during data input
 --                          ___________________________________________________       _________________________________________________________     
---      ack_i      ________/__________/                                        \_____/                                                         \_...        -- 'ack_i' can hold the core for slow data
+--      wr_i       ________/__________/                                        \_____/                                                         \_...        -- 'wr_i' can hold the core for slow data
 --                 _________________ _ ______ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ _____ ____...
 --      di_i       _________________\\\___W0_\__W1_\__W2_\__W3_\__W4_\__W5_\\\\\\\\_W6_\__W7_\__W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15_\\_X_...       -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 
@@ -81,7 +83,7 @@
 --                          _______ _ _ ___________________________________________________________________________________________________________      
 --      di_req_o   ________/                                                                                                                       \___...     -- 'di_req_o' asserted during data input
 --                                             __________________________________________________       _____________________________________________    
---      ack_i      ________________ _ _ ______/                                                  \_____/                                             \_...     -- 'ack_i' valid on rising edge of 'clk_i'
+--      wr_i       ________________ _ _ ______/                                                  \_____/                                             \_...     -- 'wr_i' valid on rising edge of 'clk_i'
 --                 ________________ _ _ ___________ _____ _____ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ ____...
 --      di_i       ________________ _ _ ______\_W0_\__W1_\__W2_\__W3_\__W4_\__W5_\__W6_\__W7_\\\\_____W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15_\__Z_...     -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 
@@ -104,7 +106,7 @@
 --                          ___________________________________                                                                         __________  
 --      di_req_o   ________/                                   \__________ _ _ ___________________ _ _ ________________________________/          ...     -- 'di_req_o' asserted during data input
 --                           ______________________________________                                                                      _________  
---      ack_i      _________/                                    \\\______ _ _ ___________________ _ _ _________________________________/         ...     -- 'ack_i' can hold the core for slow data
+--      wr_i       _________/                                    \\\______ _ _ ___________________ _ _ _________________________________/         ...     -- 'wr_i' can hold the core for slow data
 --                 ______________ _____ _____ _____ _____ _____ __________ _ _ ___________________ _ _ ______________________________________ ____...
 --      di_i       _________\_W0_\__W1_\__W2_\__W3_\__W4_\__W5_\__________ _ _ ___________________ _ _ _________________________________\_W0_\__W1...     -- words after the end_i assertion are ignored
 --                 __ _____ _____ _____ _____ _____ _____ _____ _____ ____ _ ____ _____ _____ ____ _ _ ______________________________________ ____
@@ -149,7 +151,7 @@
 --                 _________________                                                                                     __________  
 --      di_req_o                    \__________ _ _ ___________________ _ _ _____________ _ _ __________________________/          ...     -- 'di_req_o' asserted on rising edge of 'clk_i'
 --                 ____________________                                                                                   _________  
---      ack_i                        \\\_______ _ _ ___________________ _ _ _____________ _ _ ___________________________/         ...     -- 'ack_i' valid on rising edge of 'clk_i'
+--      wr_i                         \\\_______ _ _ ___________________ _ _ _____________ _ _ ___________________________/         ...     -- 'wr_i' valid on rising edge of 'clk_i'
 --                 _____ _____ _____ __________ _ _ ___________________ _ _ _____________ _ _ ________________________________ ____...
 --      di_i       _W13_\_W14_\_W15_\__________ _ _ ___________________ _ _ _____________ _ _ ___________________________\_W0_\__W1...     -- words after the end_i assertion are ignored
 --                 _____ _____ _____ _____ ____ _ ____ _____ _____ ____ _ _ ________ ____ _ ____ _____ _______________________ ____
@@ -194,6 +196,7 @@
 -- 2016/06/11   v0.01.0105  [JD]    verification against NIST-SHA2_Additional test vectors #1 to #10 passed.
 -- 2016/06/11   v0.01.0110  [JD]    optimized controller states, reduced 2 clocks per block. 
 -- 2016/06/18   v0.01.0120  [JD]    implemented error detection on 'bytes_i' input.
+-- 2016/09/25   v0.01.0220  [JD]    changed 'di_ack_i' name to 'di_wr_i', and changed semantics to 'data write'.
 --
 -----------------------------------------------------------------------------------------------------------------------
 --  TODO
@@ -238,7 +241,7 @@ architecture behavior of testbench is
     signal dut_end          : std_logic;                        -- marks end of last block data input
     -- handshake
     signal dut_di_req       : std_logic;                        -- requests data input for next word
-    signal dut_di_ack       : std_logic;                        -- high for di_i valid, low for hold
+    signal dut_di_wr        : std_logic;                        -- high for di_i write, low for hold
     signal dut_error        : std_logic;                        -- signalizes error. output data is invalid
     signal dut_do_valid     : std_logic;                        -- when high, the output is valid
     -- 256bit output registers
@@ -273,7 +276,7 @@ begin
             end_i => dut_end,
             -- handshake
             di_req_o => dut_di_req,
-            di_ack_i => dut_di_ack,
+            di_wr_i => dut_di_wr,
             error_o => dut_error,
             do_valid_o => dut_do_valid,
             -- 256bit output registers 
@@ -319,7 +322,7 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
@@ -327,11 +330,14 @@ begin
         dut_bytes <= b"11";
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
-        dut_di_ack <= '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -360,16 +366,18 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         wait until pclk'event and pclk = '1';   -- 'begin' pulse minimum width is one clock
         wait for 25 ns;                         -- TEST: stretch 'begin' pulse
         dut_start <= '0';
-        wait until dut_di_req = '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         wait until pclk'event and pclk = '1';
-        dut_di_ack <= '1';
+        dut_di_wr <= '1';
         dut_bytes <= b"00";
         dut_di <= x"61626364";
         wait until pclk'event and pclk = '1';
@@ -384,11 +392,11 @@ begin
         dut_di <= x"66676869";
         wait until pclk'event and pclk = '1';
         dut_di <= x"6768696A";
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
-        dut_di_ack <= '1';                      -- TEST: slow inputs with 'ack' handshake
+        dut_di_wr <= '1';                      -- TEST: slow inputs with 'ack' handshake
         wait until pclk'event and pclk = '1';
         dut_di <= x"68696A6B";
         wait until pclk'event and pclk = '1';
@@ -409,6 +417,7 @@ begin
         dut_bytes <= b"01";                     -- TEST: change 'bytes' value after END
         wait for 75 ns;                         -- TEST: stretch 'end' pulse
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -425,16 +434,18 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         dut_di <= x"61626364";
         dut_bytes <= b"00";
-        dut_di_ack <= '1';
         wait until pclk'event and pclk = '1';   -- 'begin' pulse minimum width is one clock
         dut_start <= '0';
-        wait until dut_di_req = '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         wait until pclk'event and pclk = '1';
         dut_di <= x"62636465";
         wait until pclk'event and pclk = '1';
@@ -464,6 +475,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';   -- 'end' pulse minimum width is one clock
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -493,7 +505,7 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
@@ -501,11 +513,14 @@ begin
         dut_bytes <= b"01";
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
-        dut_di_ack <= '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -535,7 +550,7 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
@@ -543,11 +558,15 @@ begin
         dut_bytes <= b"00";
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
-        dut_di_ack <= '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
+        dut_di_wr <= '1';
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -577,16 +596,18 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         dut_di <= x"00000000";
         dut_bytes <= b"00";
-        dut_di_ack <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
@@ -604,6 +625,7 @@ begin
         dut_bytes <= b"11";
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -633,16 +655,18 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         dut_di <= x"00000000";
         dut_bytes <= b"00";
-        dut_di_ack <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
@@ -659,6 +683,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -688,16 +713,18 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         dut_di <= x"00000000";
         dut_bytes <= b"00";
-        dut_di_ack <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
@@ -716,6 +743,7 @@ begin
         dut_bytes <= b"01";
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -745,16 +773,18 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         dut_di <= x"00000000";
         dut_bytes <= b"00";
-        dut_di_ack <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        wait until dut_di_req = '1';
+        dut_di_wr <= '1';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
@@ -773,6 +803,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -802,13 +833,12 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        dut_di_ack <= '1';
         dut_bytes <= b"00";
         dut_di <= x"00000000";
         count_words := 0;
@@ -817,12 +847,15 @@ begin
         blocks <= count_blocks;
         loop
             wait until dut_di_req = '1';
+            wait until pclk'event and pclk = '1';
+            dut_di_wr <= '1';
             loop
                 wait until pclk'event and pclk = '1';
                 count_words := count_words + 1;
                 words <= count_words;
                 exit when words = 15;
             end loop;
+            dut_di_wr <= '0';
             count_words := 0;
             words <= count_words;
             count_blocks := count_blocks + 1;
@@ -832,6 +865,8 @@ begin
         count_words := 0;
         words <= count_words;
         wait until dut_di_req = '1';
+        wait until pclk'event and pclk = '1';
+        dut_di_wr <= '1';
         loop
             wait until pclk'event and pclk = '1';
             count_words := count_words + 1;
@@ -841,6 +876,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -870,13 +906,12 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        dut_di_ack <= '1';
         dut_bytes <= b"00";
         dut_di <= x"41414141";
         count_words := 0;
@@ -885,12 +920,15 @@ begin
         blocks <= count_blocks;
         loop
             wait until dut_di_req = '1';
+            wait until pclk'event and pclk = '1';
+            dut_di_wr <= '1';
             loop
                 wait until pclk'event and pclk = '1';
                 count_words := count_words + 1;
                 words <= count_words;
                 exit when words = 15;
             end loop;
+            dut_di_wr <= '0';
             count_words := 0;
             words <= count_words;
             count_blocks := count_blocks + 1;
@@ -900,6 +938,8 @@ begin
         count_words := 0;
         words <= count_words;
         wait until dut_di_req = '1';
+        wait until pclk'event and pclk = '1';
+        dut_di_wr <= '1';
         loop
             wait until pclk'event and pclk = '1';
             count_words := count_words + 1;
@@ -909,6 +949,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -938,13 +979,12 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        dut_di_ack <= '1';
         dut_bytes <= b"00";
         dut_di <= x"55555555";
         count_words := 0;
@@ -953,12 +993,15 @@ begin
         blocks <= count_blocks;
         loop
             wait until dut_di_req = '1';
+            wait until pclk'event and pclk = '1';
+            dut_di_wr <= '1';
             loop
                 wait until pclk'event and pclk = '1';
                 count_words := count_words + 1;
                 words <= count_words;
                 exit when words = 15;
             end loop;
+            dut_di_wr <= '0';
             count_words := 0;
             words <= count_words;
             count_blocks := count_blocks + 1;
@@ -968,6 +1011,8 @@ begin
         count_words := 0;
         words <= count_words;
         wait until dut_di_req = '1';
+        wait until pclk'event and pclk = '1';
+        dut_di_wr <= '1';
         loop
             wait until pclk'event and pclk = '1';
             count_words := count_words + 1;
@@ -979,6 +1024,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
@@ -1008,13 +1054,12 @@ begin
         dut_bytes <= b"00";
         dut_start <= '0';
         dut_end <= '0';
-        dut_di_ack <= '0';
+        dut_di_wr <= '0';
         wait until pclk'event and pclk = '1';
         dut_ce <= '1';
         dut_start <= '1';
         wait until pclk'event and pclk = '1';
         dut_start <= '0';
-        dut_di_ack <= '1';
         dut_bytes <= b"00";
         dut_di <= x"00000000";
         count_words := 0;
@@ -1023,12 +1068,15 @@ begin
         blocks <= count_blocks;
         loop
             wait until dut_di_req = '1';
+            wait until pclk'event and pclk = '1';
+            dut_di_wr <= '1';
             loop
                 wait until pclk'event and pclk = '1';
                 count_words := count_words + 1;
                 words <= count_words;
                 exit when words = 15;
             end loop;
+            dut_di_wr <= '0';
             count_words := 0;
             words <= count_words;
             count_blocks := count_blocks + 1;
@@ -1038,6 +1086,8 @@ begin
         count_words := 0;
         words <= count_words;
         wait until dut_di_req = '1';
+        wait until pclk'event and pclk = '1';
+        dut_di_wr <= '1';
         loop
             wait until pclk'event and pclk = '1';
             count_words := count_words + 1;
@@ -1047,6 +1097,7 @@ begin
         dut_end <= '1';
         wait until pclk'event and pclk = '1';
         dut_end <= '0';
+        dut_di_wr <= '0';
         if dut_error /= '1' and dut_do_valid /= '1' then 
             while dut_error /= '1' and dut_do_valid /= '1' loop
                 wait until pclk'event and pclk = '1';
