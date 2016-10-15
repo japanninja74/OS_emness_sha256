@@ -13,7 +13,7 @@
 --      and tests the GV_SHA256 engine with the NIST SHA256 test vectors, including the additional NIST test vectors up to the 
 --      1 million chars.
 --
---      The logic implements a fast engine, with 66 cycles per 512-bit block. 
+--      The logic implements a fast engine, with 65 cycles per 512-bit block. 
 --
 --      The following waveforms describe the operation of the engine control signals for message start, update and end.
 --
@@ -24,8 +24,10 @@
 --      released. 
 --      The DATA_INPUT state is signalled by the data request signal 'di_req' going HIGH. The processor will latch 16 words from the 'di' port, at every 
 --      rising edge of the system clock. At the end of the block input, the 'di_req' signal goes LOW. 
---      The input data can be held by bringing the 'ack' input LOW. When the 'ack' input is held LOW, it includes a wait state in the whole processor, to
---      cope with slow inputs or to allow periodic fetches of input data from multiple data sources. 
+--      The input data can be held by bringing the 'wr_i' input LOW. When the 'wr_i' input is held LOW during data write, it inserts a wait state in the 
+--      processor, to cope with slow inputs or to allow periodic fetches of input data from multiple data sources. 
+--      The 'di_req' signal will remain HIGH while data input is requested. When all 16 words are clocked in, 'di_req' goes LOW, and 'wr_i' is not allowed
+--      during the internal processing phase.
 --
 --      state              |reset| data                                    |wait |                                                     | process                  
 --                    __   |__   |__    __    __    __    __    __    __   |__   |__    __    __    __    __    __    __    __    __   |__    __    __ 
@@ -64,8 +66,8 @@
 --      end_i      ______________________________________________________________________________________________________________________________...        -- 'end_i' marks end of last block data input
 --                                      _____________________________________________________________________________________________________       
 --      di_req_o   ____________________/                                                                                                     \___...        -- 'di_req_o' asserted during data input
---                          ___________________________________________________       _________________________________________________________     
---      wr_i       ________/__________/                                        \_____/                                                         \_...        -- 'wr_i' can hold the core for slow data
+--                                       ______________________________________       _________________________________________________________     
+--      wr_i       _____________________/                                      \_____/                                                         \_...        -- 'wr_i' can hold the core for slow data
 --                 _________________ _ ______ _____ _____ _____ _____ _____ ___________ _____ _____ _____ _____ _____ _____ _____ _____ _____ ____...
 --      di_i       _________________\\\___W0_\__W1_\__W2_\__W3_\__W4_\__W5_\\\\\\\\_W6_\__W7_\__W8_\__W9_\_W10_\_W11_\_W12_\_W13_\_W14_\_W15_\\_X_...       -- user words on 'di_i' are latched on 'clk_i' rising edge
 --                 
@@ -73,10 +75,10 @@
 --      UPDATE BLOCK (delayed start)
 --      ===========================
 --
---      The data for the new block can be delayed, by keeping the 'ack' signal low until the data is present at the data input port. 
+--      The data for the new block can be delayed, by keeping the 'wr_i' signal low until the data is present at the data input port. 
 --
---      state      ..|next | data                                                                  |wait |                                         | process                    
---                    __    __    __    __    __    __    __    __    __    __    __    __    __   |__   |__    __    __    __    __    __    __    __ 
+--      state      ..|next | wait                  | data                                          |wait |                                         | process                    
+--                    __    __    __    __    __   |__    __    __    __    __    __    __    __   |__   |__    __    __    __    __    __    __    __ 
 --      clk_i      __/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \...     -- system clock
 --                                                                                                                                                       
 --      end_i      ____________________________________________________________________________________________________________________________________...     -- 'end_i' marks end of last block data input
@@ -138,8 +140,8 @@
 --      END BLOCK (full last block)
 --      ==================
 --
---      If the last block has exactly 16 full words, the controller inserts a dummy PADDING cycle, processes the input block, and inserts a
---      last PADDING block followed by a last BLK_PROCESS block.
+--      If the last block has exactly 16 full words, the controller starts the block processing in the PADDING cycle, processes the input block, 
+--      and inserts a last PADDING block followed by a last BLK_PROCESS block.
 --
 --      state      ... data         |pad  | process   |next | pad                   | process   |next | valid     |reset| data
 --                 __    __    __    __    __          __    __    __          __    __          __    __    __    __    __    __     
@@ -155,7 +157,7 @@
 --                 _____ _____ _____ __________ _ _ ___________________ _ _ _____________ _ _ ________________________________ ____...
 --      di_i       _W13_\_W14_\_W15_\__________ _ _ ___________________ _ _ _____________ _ _ ___________________________\_W0_\__W1...     -- words after the end_i assertion are ignored
 --                 _____ _____ _____ _____ ____ _ ____ _____ _____ ____ _ _ ________ ____ _ ____ _____ _______________________ ____
---      st_cnt_reg _13__/_14__/_15__/_16__/_16_ _ _63_/__64_/__0__/__1_ _ _ __/_15__/_16_ _ _63_/__64_/_____0_____/__0__/__0__/__1_...     -- internal state counter value
+--      st_cnt_reg _13__/_14__/_15__/_16__/_17_ _ _63_/__64_/__0__/__1_ _ _ __/_15__/_16_ _ _63_/__64_/_____0_____/__0__/__0__/__1_...     -- internal state counter value
 --                 _____ _____ _____                                                                                     _____ ____
 --      bytes_i    __0__/__0__/__0__>-----------------------------------------------------------------------------------<__0__/__0_...     -- bytes_i mark number of valid bytes in each word
 --                                                                                                     ___________                 
@@ -197,6 +199,7 @@
 -- 2016/06/11   v0.01.0110  [JD]    optimized controller states, reduced 2 clocks per block. 
 -- 2016/06/18   v0.01.0120  [JD]    implemented error detection on 'bytes_i' input.
 -- 2016/09/25   v0.01.0220  [JD]    changed 'di_ack_i' name to 'di_wr_i', and changed semantics to 'data write'.
+-- 2016/10/01   v0.01.0250  [JD]    optimized the last null-padding state, making the algorithm isochronous for full last data blocks. 
 --
 -----------------------------------------------------------------------------------------------------------------------
 --  TODO
@@ -396,7 +399,7 @@ begin
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
         wait until pclk'event and pclk = '1';
-        dut_di_wr <= '1';                      -- TEST: slow inputs with 'ack' handshake
+        dut_di_wr <= '1';                      -- TEST: slow inputs with 'wr_i' handshake
         wait until pclk'event and pclk = '1';
         dut_di <= x"68696A6B";
         wait until pclk'event and pclk = '1';
@@ -425,11 +428,76 @@ begin
         end if;
         wait for CLK_PERIOD*20;
         -------------------------------------------------------------------------
-        -- restart test #2
+        -- restart test #2: force error by stretching the write strobe
+        dut_ce <= '0';
         test_case <= 0;
         wait until pclk'event and pclk = '1';
         test_case <= 2;
+        dut_di <= (others => '0');
+        dut_bytes <= b"00";
+        dut_start <= '0';
+        dut_end <= '0';
+        dut_di_wr <= '0';
+        wait until pclk'event and pclk = '1';
+        dut_ce <= '1';
+        dut_start <= '1';
+        wait until pclk'event and pclk = '1';   -- 'begin' pulse minimum width is one clock
+        wait for 25 ns;                         -- TEST: stretch 'begin' pulse
+        dut_start <= '0';
+        if dut_di_req = '0' then
+            wait until dut_di_req = '1';
+        end if;
+        wait until pclk'event and pclk = '1';
+        dut_di_wr <= '1';
+        dut_bytes <= b"00";
+        dut_di <= x"61626364";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"62636465";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"63646566";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"64656667";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"65666768";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"66676869";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"6768696A";
+        dut_di_wr <= '0';
+        wait until pclk'event and pclk = '1';
+        wait until pclk'event and pclk = '1';
+        wait until pclk'event and pclk = '1';
+        wait until pclk'event and pclk = '1';
+        wait until pclk'event and pclk = '1';
+        dut_di_wr <= '1';                      -- TEST: slow inputs with 'wr_i' handshake
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"68696A6B";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"696A6B6C";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"6A6B6C6D";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"6B6C6D6E";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"6C6D6E6F";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"6D6E6F70";
+        wait until pclk'event and pclk = '1';
+        dut_di <= x"6E6F7071";
+        wait for 75 ns;
+        dut_di_wr <= '0';
+        if dut_error /= '1' and dut_do_valid /= '1' then 
+            while dut_error /= '1' and dut_do_valid /= '1' loop
+                wait until pclk'event and pclk = '1';
+            end loop;
+        end if;
+        wait for CLK_PERIOD*20;
+        -------------------------------------------------------------------------
+        -- restart test #2
         dut_ce <= '0';
+        test_case <= 0;
+        wait until pclk'event and pclk = '1';
+        test_case <= 2;
         dut_di <= (others => '0');
         dut_bytes <= b"00";
         dut_start <= '0';

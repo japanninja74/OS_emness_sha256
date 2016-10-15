@@ -14,7 +14,7 @@
 --      control inputs for BEGIN/END of the message data stream. The input bus is a 32bit word bus, with a byte lane selector to signalize
 --      how many bytes are valid in the last word. 
 --
---      It is a structural integration of the logic blocks for the SHA256 engine, with the internal datapath and controlpath wires.
+--      The core is a structural integration of the logic blocks for the SHA256 engine, with the internal datapath and controlpath wires.
 --
 --      Written in synthesizable VHDL, the hash engine is a low resource, area-efficient implementation of the FIPS-180-4 SHA256 hash algorithm.
 --      Designed around the core registers and combinational hash functions as a 768bit-wide engine, the engine takes 64+1 clocks to 

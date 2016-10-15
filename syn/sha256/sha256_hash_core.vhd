@@ -141,6 +141,11 @@ begin
             end if;
         end if;
     end process core_regs_proc;
+
+    --=============================================================================================
+    --  COMBINATIONAL LOGIC
+    --=============================================================================================
+    -- word rotation and bit manipulation for each cycle
     
     -- input muxes and word shifter wires
     next_reg_a_proc: next_reg_a <= unsigned(A_i) when ld_i = '1' else sum0;

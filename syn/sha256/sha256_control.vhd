@@ -173,8 +173,8 @@
 --      END BLOCK (full last block)
 --      ==================
 --
---      If the last block has exactly 16 full words, the controller inserts a dummy PADDING cycle, processes the input block, and inserts a
---      last PADDING block followed by a last BLK_PROCESS block.
+--      If the last block has exactly 16 full words, the controller starts the block processing in the PADDING cycle, processes the input block, 
+--      and inserts a last PADDING block followed by a last BLK_PROCESS block.
 --
 --      STATE      ... data         |pad  | process   |next | pad                   | process   |next | valid     |reset| data
 --                 __    __    __   |__   |__         |__   |__    __          __   |__         |__   |__    __   |__   |__    __     
@@ -190,7 +190,7 @@
 --                 _____ _____ _____ __________ _ _ ___________________ _ _ _____________ _ _ ________________________________ ____...
 --      di_i       _W13_\_W14_\_W15_\__________ _ _ ___________________ _ _ _____________ _ _ ___________________________\_W0_\__W1...     -- words after the end_i assertion are ignored
 --                 _____ _____ _____ _____ ____ _ ____ _____ _____ ____ _ _ ________ ____ _ ____ _____ _______________________ ____
---      st_cnt_reg _13__/_14__/_15__/_16__/_16_ _ _63_/__64_/__0__/__1_ _ _ __/_15__/_16_ _ _63_/__64_/_____0_____/__0__/__0__/__1_...     -- internal state counter value
+--      st_cnt_reg _13__/_14__/_15__/_16__/_17_ _ _63_/__64_/__0__/__1_ _ _ __/_15__/_16_ _ _63_/__64_/_____0_____/__0__/__0__/__1_...     -- internal state counter value
 --                 _____ _____ _____                                                                                     _____ ____
 --      bytes_i    __0__/__0__/__0__>-----------------------------------------------------------------------------------<__0__/__0_...     -- bytes_i mark number of valid bytes in each word
 --                                                                                                     ___________                 
@@ -234,6 +234,8 @@
 -- 2016/06/18   v0.01.0120  [JD]    implemented error detection on 'bytes_i' input.
 -- 2016/07/06   v0.01.0210  [JD]    optimized suspend logic on 'sch_ld' to supress possible glitch in 'pad_one_next'.
 -- 2016/09/25   v0.01.0220  [JD]    changed 'ack_i' name to 'wr_i', and changed semantics to 'data write'.
+-- 2016/10/01   v0.01.0250  [JD]    optimized the last null-padding state, making the algorithm isochronous for full last data blocks. 
+-- 2016/10/01   v0.01.0260  [JD]    eliminated bytes error register, streamlined error logic.
 --
 -----------------------------------------------------------------------------------------------------------------------
 --  TODO
@@ -302,15 +304,13 @@ architecture rtl of sha256_control is
     signal sha_reset : std_logic;
     signal sha_init : std_logic;
     signal wait_run_ce : std_logic;
-    -- registered flags: last block, padding control and hmac processing
+    -- registered flags: last block, padding control
     signal sha_last_blk_reg : std_logic;
     signal sha_last_blk_next : std_logic;
     signal padding_reg : std_logic;
     signal padding_next : std_logic;
     signal pad_one_reg : std_logic;
     signal pad_one_next : std_logic;
-    signal bytes_error_reg : std_logic;
-    signal bytes_error_next : std_logic;
     -- 64 bit message bit counter
     signal msg_bit_cnt_reg : unsigned (63 downto 0);
     signal msg_bit_cnt_next : unsigned (63 downto 0);
@@ -338,9 +338,10 @@ architecture rtl of sha256_control is
     signal di_req : std_logic;                          -- data request
     signal di_wr_window : std_logic;                    -- valid data write window    
     signal data_valid : std_logic;                      -- operation finished. output data is valid
+    signal data_input_error : std_logic;                -- data write outside write valid window
+    signal bytes_error : std_logic;                     -- bytes selection error
+    signal error_lock : std_logic;                      -- error state lock
     signal core_error : std_logic;                      -- operation aborted. output data is not valid
-    signal data_input_error : std_logic;                -- internal error signal for data write    
-    signal out_error : std_logic;                       -- operation aborted. output data is not valid
     
 begin
     --=============================================================================================
@@ -354,8 +355,8 @@ begin
             if reset = '1' then
                 -- all registered values are reset on master clear
                 hash_control_st_reg <= st_reset;
-            elsif out_error = '1' then
-                -- error latch: lock on the error state            
+            elsif core_error = '1' then
+                -- error latch: lock on the error state
                 hash_control_st_reg <= st_error;
             elsif ce_i = '1' then
                 -- all registered values are held on master clock enable
@@ -372,16 +373,6 @@ begin
                 -- all registered values are held on master clock enable
                 sha_last_blk_reg <= sha_last_blk_next;
                 padding_reg <= padding_next;
-            end if;
-        end if;
-        -- bytes_i error register: sync RESET on 'reset'
-        if clk_i'event and clk_i = '1' then
-            if reset = '1' then
-                -- all registered values are reset on master clear
-                bytes_error_reg <= '0';
-            else
-                -- all registered values are held on master clock enable
-                bytes_error_reg <= bytes_error_next;
             end if;
         end if;
     end process control_fsm_proc;
@@ -442,7 +433,7 @@ begin
         padding_next <= padding_reg;
         -- handshaking
         sha_init <= '0';
-        core_error <= '0';
+        error_lock <= '0';
         di_wr_window <= '0';        
         words_sel <= b"00";
         data_valid <= '0';
@@ -503,9 +494,8 @@ begin
             when st_sha_blk_nxt =>          -- prepare for next block
                 -- moore outputs
                 st_cnt_clr <= '1';          -- reset state counter at the beginning of each block
-                sch_ld <= '0';
                 sch_ce <= '0';              -- stop the message schedule
-                core_ld <= '1';             -- load previous result value into core registers
+                core_ld <= '1';             -- load result value into core registers
                 core_ce <= '1';             -- latch result value into core registers
                 oregs_ce <= '1';            -- latch core result into regs accumulator
                 -- next state
@@ -521,11 +511,11 @@ begin
                 -- moore outputs                
                 padding_next <= '1';
                 if st_cnt_reg = 16 then     -- if word 16, data block was full: proceed to process this block
-                    -- pause processing for this cycle
-                    sch_ld <= '0';
-                    sch_ce <= '0';
-                    core_ce <= '0';
-                    st_cnt_ce <= '0';
+                    -- process state #16 in this cycle and proceed to process the rest of the block
+                    st_cnt_ce <= '1';           -- enable state counter
+                    sch_ld <= '0';              -- recirculate scheduler data
+                    sch_ce <= '1';              -- enable message scheduler clock
+                    core_ce <= '1';             -- enable processing clock
                     -- next state
                     hash_control_st_next <= st_sha_blk_process;
                 else                        -- incomplete block: pad words until data block completes
@@ -550,13 +540,13 @@ begin
             when st_sha_data_valid =>       -- process is finished, waiting for begin command
                 -- moore outputs
                 data_valid <= '1';          -- output results are valid
-                -- wait for core reset with 'reset'               
+                -- wait for core reset with 'start'               
 
             when st_error =>                -- processing or input error: reset with 'reset' = 1
                 -- moore outputs
-                core_error <= '1';
+                error_lock <= '1';          -- lock error state
                 st_cnt_clr <= '1';          -- clear state counter
-                -- wait for core reset with 'reset'               
+                -- wait for core reset with 'start'               
 
             when others =>                  -- internal state machine error
                 -- next state
@@ -564,7 +554,6 @@ begin
 
         end case; 
     end process control_combi_proc;
-
 
     --=============================================================================================
     --  COMBINATIONAL CONTROL LOGIC
@@ -619,7 +608,7 @@ begin
     end process msg_bit_cnt_next_combi_proc;
 
     -- data input wait/run: insert wait states during data input for 'wr_i' = '0'
-    wait_run_proc:          wait_run_ce <= '1' when di_req = '1' and wr_i  = '1' else '0';
+    wait_run_ce_proc:       wait_run_ce <= '1' when di_req = '1' and wr_i  = '1' else '0';
 
     -- padding one-insertion control
     one_insert_proc:        one_insert <= '1' when pad_one_reg = '1' else '0';
@@ -631,13 +620,13 @@ begin
     st_cnt_next_proc:       st_cnt_next <= st_cnt_reg + 1;
 
     -- bytes_i error logic
-    bytes_error_proc:       bytes_error_next <= '1' when bytes_i /= b"00" and end_i /= '1' and di_req = '1' and wr_i  = '1' else bytes_error_reg;
+    bytes_error_proc:       bytes_error <= '1' when bytes_i /= b"00" and end_i /= '1' and di_req = '1' and wr_i = '1' else '0';
 
     -- data input error logic
     data_input_error_proc:  data_input_error <= '1' when wr_i = '1' and di_wr_window /= '1' else '0';
 
     -- error detection logic
-    out_error_combi_proc:   out_error <= '1' when error_i = '1' or core_error = '1' or bytes_error_reg = '1' or data_input_error = '1' else '0';
+    core_error_combi_proc:  core_error <= '1' when error_i = '1' or error_lock = '1' or bytes_error = '1' or data_input_error = '1' else '0';
     
     --=============================================================================================
     --  OUTPUT LOGIC PROCESSES
@@ -656,7 +645,7 @@ begin
     Kt_addr_o_proc :        Kt_addr_o       <= std_logic_vector(st_cnt_reg(5 downto 0));
     di_req_o_proc :         di_req_o        <= di_req;
     data_valid_o_proc :     data_valid_o    <= data_valid;
-    error_o_proc :          error_o         <= out_error;
+    error_o_proc :          error_o         <= core_error;
     
 end rtl;
 

@@ -54,8 +54,8 @@ use ieee.numeric_std.all;
 entity sha256_msg_sch is
     port (  
         clk_i : in std_logic := 'U';                                            -- system clock
-        ce_i : in std_logic := 'U';                                             -- clock enable from control logic
-        ld_i : in std_logic := 'U';                                             -- internal mux selection from control logic
+        ce_i : in std_logic := 'U';                                             -- clock input to word shifter
+        ld_i : in std_logic := 'U';                                             -- transparent load input to output
         M_i : in std_logic_vector (31 downto 0) := (others => 'U');             -- big endian input message words
         Wt_o : out std_logic_vector (31 downto 0)                               -- message schedule output words
     );                      
