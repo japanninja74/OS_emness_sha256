@@ -28,6 +28,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+/* This file requests a number of files as input (specify the number
+of files first and then put all the names) and via hash calculation
+checks if those files have equal content.*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
