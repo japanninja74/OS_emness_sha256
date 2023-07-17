@@ -66,8 +66,8 @@ static struct of_device_id sha256_of_match[] = {
 MODULE_DEVICE_TABLE(of, sha256_of_match);
 
 /* driver representation */
-static int sha256_probe(struct platform_device *pdev);  /* device found while probing: driver startup */
-static int sha256_remove(struct platform_device *pdev); /* device removed: driver unloading */
+static int sha256Probe(struct platform_device *pdev);  /* device found while probing: driver startup */
+static int sha256Remove(struct platform_device *pdev); /* device removed: driver unloading */
 
 static struct platform_driver sha256_driver = {
   .driver = {
@@ -75,8 +75,8 @@ static struct platform_driver sha256_driver = {
     .owner = THIS_MODULE,
     .of_match_table     = sha256_of_match,
   },
-  .probe                = sha256_probe,
-  .remove               = sha256_remove,
+  .probe                = sha256Probe,
+  .remove               = sha256Remove,
 };
 
 static struct file_operations sha256_fops = {
@@ -568,7 +568,7 @@ static irqreturn_t sha256IRQHandler(int irq, void *dev_id) {
 /*
  * module dynamic management
  */
-static int sha256_probe(struct platform_device *pdev) {
+static int sha256Probe(struct platform_device *pdev) {
   struct resource *r_irq; /* Interrupt resources */
   struct resource *r_mem; /* IO mem resources */
   struct device *dev = &pdev->dev;
@@ -577,29 +577,11 @@ static int sha256_probe(struct platform_device *pdev) {
 
   dev_info(dev, DEVICE_NAME ": device tree probing\n");
 
-  /* dynamically allocate device number */
-  if ((rc = alloc_chrdev_region(&dev_number, 0, 1, DEVICE_NAME))) {
-    dev_err(dev, DEVICE_NAME ": failed device number allocation\n");
-    return rc;
-  }
-  dev_info(dev, DEVICE_NAME ": device number allocated: major = %d, minor = %d\n", 
-      MAJOR(dev_number), MINOR(dev_number));
-
-  /* register device class */
-  dev_class = class_create(THIS_MODULE, CLASS_NAME);
-  if (IS_ERR(dev_class)) {
-    dev_err(dev, DEVICE_NAME ": failed class creation\n");
-    rc = PTR_ERR(dev_class);
-    goto revert_devnumber;
-  }
-  dev_info(dev, DEVICE_NAME ": device class registered\n");
-
   /* initialize device representation: iospace */
   r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
   if (!r_mem) {
     dev_err(dev, DEVICE_NAME ": invalid address\n");
-    rc = -ENODEV;
-    goto revert_class;
+    return -ENODEV;
   }
   dev_info(dev, DEVICE_NAME ": iospace start = %p, end = %p\n", (void*) r_mem->start, (void*) r_mem->end);
   
@@ -609,8 +591,7 @@ static int sha256_probe(struct platform_device *pdev) {
   if (!request_mem_region(sha256_dev.mem_start,
         sha256_dev.mem_end - sha256_dev.mem_start + 1, DRIVER_NAME)) {
     dev_err(dev, DEVICE_NAME ": couldn't lock memory region at %p\n", (void *)sha256_dev.mem_start);
-    rc = -EBUSY;
-    goto revert_class;
+    return -EBUSY;
   }
 
   sha256_dev.base_addr = 
@@ -678,7 +659,7 @@ static int sha256_probe(struct platform_device *pdev) {
     dev_info(dev, DEVICE_NAME ": irq registered\n");
   }
 
-/* finalize device representation */
+  /* finalize device representation */
   if ((rc = cdev_add(&sha256_dev.cdev, dev_number, 1))) {
     dev_err(dev, DEVICE_NAME ": failed to notify struct cdev with the kernel\n");
     goto revert_blockalloc_next;
@@ -692,6 +673,7 @@ static int sha256_probe(struct platform_device *pdev) {
     goto revert_devadd;
   }
   dev_info(dev, DEVICE_NAME ": done initialization\n");
+
   return 0;
 
 revert_devadd          : cdev_del(&sha256_dev.cdev);
@@ -702,21 +684,51 @@ revert_blockalloc_next :
 revert_blockalloc      : kfree(sha256_dev.block_ptr);
 revert_hashalloc       : kfree(sha256_dev.hash_ptr);
 revert_memrmap         : iounmap(sha256_dev.base_addr);
-revert_memrq           : release_mem_region(sha256_dev.mem_start, 
-                             sha256_dev.mem_end - sha256_dev.mem_start + 1);
-revert_class           : class_unregister(dev_class);
-                         class_destroy(dev_class); 
-revert_devnumber       : unregister_chrdev_region(dev_number, 1);
+revert_memrq           : release_mem_region(sha256_dev.mem_start, sha256_dev.mem_end - sha256_dev.mem_start + 1);
 
                          return rc;
 }
 
 static int __init sha256Init(void) {
+  int rc = 0;
+
   PR_INFO("sha256Init(): irq_enable = %s", (irq_enable ? "true" : "false"));
-  return platform_driver_register(&sha256_driver);
+
+  /* dynamically allocate device number */
+  if ((rc = alloc_chrdev_region(&dev_number, 0, 1, DEVICE_NAME))) {
+    PR_ALERT("failed device number allocation");
+
+    return rc;
+  }
+  PR_INFO("device number allocated: major = %d, minor = %d", MAJOR(dev_number), MINOR(dev_number));
+
+  /* register device class */
+  dev_class = class_create(THIS_MODULE, CLASS_NAME);
+  if (IS_ERR(dev_class)) {
+    PR_ALERT("failed class creation");
+
+    unregister_chrdev_region(dev_number, 1);
+    return PTR_ERR(dev_class);
+  }
+  PR_INFO("device class registered");
+  
+  if ((rc = platform_driver_register(&sha256_driver))) {
+    PR_ALERT("failed platform driver registration");
+    
+    class_unregister(dev_class);
+    class_destroy(dev_class); 
+    unregister_chrdev_region(dev_number, 1);
+    return rc;
+  }
+  PR_INFO("platform driver registered");
+
+  return 0;
+
 }
 
-static int sha256_remove(struct platform_device *pdev) {
+static int sha256Remove(struct platform_device *pdev) {
+
+  PR_DEVEL("sha256Remove()");
 
   device_destroy(dev_class, dev_number);
   cdev_del(&sha256_dev.cdev);
@@ -726,18 +738,19 @@ static int sha256_remove(struct platform_device *pdev) {
   kfree(sha256_dev.block_ptr);
   kfree(sha256_dev.hash_ptr);
   iounmap(sha256_dev.base_addr);
-  release_mem_region(sha256_dev.mem_start, 
-      sha256_dev.mem_end - sha256_dev.mem_start + 1);
-  class_unregister(dev_class);
-  class_destroy(dev_class); 
-  unregister_chrdev_region(dev_number, 1);
+  release_mem_region(sha256_dev.mem_start, sha256_dev.mem_end - sha256_dev.mem_start + 1);
 
   return 0;
 }
 
 static void __exit sha256Exit(void) {
-  platform_driver_unregister(&sha256_driver);
   PR_INFO("sha256Exit()");
+
+  platform_driver_unregister(&sha256_driver);
+  class_unregister(dev_class);
+  class_destroy(dev_class); 
+  unregister_chrdev_region(dev_number, 1);
+
 }
 
 module_init(sha256Init);
