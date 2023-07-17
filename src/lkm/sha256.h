@@ -10,7 +10,7 @@
  *                     Stephano Perera     <s313080@studenti.polito.it>
  *
  * Date              : 07.07.2023
- * Last Modified Date: 10.07.2023
+ * Last Modified Date: 17.07.2023
  *
  * Copyright (c) 2023
  *
@@ -124,14 +124,14 @@ struct sha256_mmap {
 
 /*
  * device representation
- */ 
+ */
 struct sha256_dev {
-  
+
   /* get resources when probing the device tree */
-  int irq;                          
+  int irq;
   unsigned long mem_start;
   unsigned long mem_end;
-  void __iomem *base_addr;          
+  void __iomem *base_addr;
 
   /* implementation details */
   atomic_t open_cnt;                /* open() counter */
