@@ -12,9 +12,9 @@
  * Date              : 14.07.2023
  * Last Modified Date: 18.07.2023
  * Description		 : This program constructs a TCP server capable of concurrently handling multiple clients using multithreading. 
- *					   It offers various functions to clients for interacting with a shared folder on the server, such as listing 
- *				   	   files (Ls), creating directories (mkdir), and downloading file contents while verifying their integrity 
- *					   using the SHA256 checksum.
+ *		           It offers various functions to clients for interacting with a shared folder on the server, such as listing 
+ *		           files (Ls), creating directories (mkdir), and downloading file contents while verifying their integrity 
+ *		           using the SHA256 checksum.
  *
  * Copyright (c) 2023
  *
