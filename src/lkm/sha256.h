@@ -43,6 +43,7 @@
  * descriptive macros
  */
 #define DEVICE_NAME "sha256"
+#define DRIVER_NAME DEVICE_NAME
 #define CLASS_NAME  "crypto"
 
 /*
@@ -53,21 +54,13 @@ static bool irq_enable;        /* load time parameter to choose irq or polling *
 /*
  * utility macros
  */
-#ifdef DEBUG_VERBOSE
-#  define PRINTD(fmt, args...) printk(KERN_DEBUG DEVICE_NAME ": " fmt "\n", ## args)
-#else
-#  define PRINTD(fmt, args...)
-#endif
-
-#define PRINTA(fmt, args...)    printk(KERN_ALERT DEVICE_NAME ": " fmt "\n", ## args)
+#define PR_ALERT(fmt, args...) pr_alert(DRIVER_NAME ": " fmt "\n", ## args)
+#define PR_INFO(fmt, args...) pr_info(DRIVER_NAME ": " fmt "\n", ## args)
+#define PR_DEVEL(fmt, args...) pr_devel(DRIVER_NAME ": " fmt "\n", ## args)
 
 /*
  * device definitions
  */
-#define SHA256_IRQLINE    61
-#define SHA256_BASEADDR   0x43C00000
-#define SHA256_MEMSIZE    100
-
 struct sha256_mmap {
   u32 CSR; /* control and status register */
 
@@ -127,12 +120,20 @@ struct sha256_mmap {
 #  define SHA256_IOWRITE32(value, mmap_addr, reg) SHA256_IOWRITE32_RAW(value, mmap_addr, reg)
 #endif
 
+#define POLLING_SLEEP_US          1 /* roughly 1 block processing delay */
+
 /*
  * device representation
- */
+ */ 
 struct sha256_dev {
-  void *mmap_baseaddr;              /* pointer to beginning of memory mapped segment */
+  
+  /* get resources when probing the device tree */
+  int irq;                          
+  unsigned long mem_start;
+  unsigned long mem_end;
+  void __iomem *base_addr;          
 
+  /* implementation details */
   atomic_t open_cnt;                /* open() counter */
   unsigned long skip_core_enable;   /* core enable initialization */
   struct semaphore sem;             /* device big lock */
@@ -150,7 +151,7 @@ struct sha256_dev {
   void *hash_ptr;                   /* buffered hash */
   void *block_ptr;                  /* buffered block */
 
-  struct cdev cdev;
+  struct cdev cdev;                 /* kernel character device representation */
 };
 
 /*
@@ -174,8 +175,8 @@ static int sha256CheckFlags(int flags);
 /*
  * private operations
  */
-
 static bool deviceWrite(const char *buf, size_t count);
 static bool deviceLast(void);
 
 #endif //GV_SHA256_H
+
