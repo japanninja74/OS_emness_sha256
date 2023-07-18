@@ -101,6 +101,22 @@ are available in [`src/ip/api`](src/ip/api). To test the hardware design.
 
 6. In the *Assistant* tab, select the `<project-name>_system` entry and hit *Run*.
 
+### PetaLinux Flow
+The PetaLinux flow is extensively documented in the reference guide [UG1144][amd-doc]. The steps for
+a custom hardware platform are summarized in the table below.
+
+| Design Step | Tool |
+| ----------- | ---- |
+| Create a PetaLinux project | `petalinux-create -t project` |
+| Initialize a PetaLinux project (for custom hardware only) | `petalinux-config--get-hw-description` |
+| Configure system-level options | `petalinux-config` |
+| Create user components | `petalinux-create -t COMPONENT` |
+| Configure U-Boot | `petalinux-config -c u-boot` |
+| Configure the Linux kernel | `petalinux-config -c kernel` |
+| Configure the root filesystem | `petalinux-config -c rootfs` |
+| Build the system | `petalinux-build` |
+| Package for deploying the system | `petalinux-package` |
+
 ## License
 
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
