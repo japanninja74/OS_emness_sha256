@@ -37,6 +37,7 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
     * [Exercise 4](#exercise-4)
     * [Exercise 5](#exercise-5)
     * [Exercise 6](#exercise-6)
+    * [Exercise 7](#exercise-7)
 
 * [License](#license)
 
