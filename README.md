@@ -19,6 +19,36 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 [Abdul Rehman](mailto:s315198@studenti.polito.it>), and
 [Stephano Perera](mailto:s313080@studenti.polito.it>)
 
+## Project Advancement
+* [X] Collect and organize material
+
+* [ ] Platform design
+    
+    * [X] simple AXI4 Lite interconnection
+   
+    * [ ] AXI4 Stream + Lite interconnection to leverage stream-hashing capabilities of the crypto core
+      
+      *TODO* convert crypto core protocol to AXI4 Stream
+
+* [X] Baremetal self-test
+
+    * [X] polling synchronization
+    
+    * [X] interrupt synchronization
+
+* [ ] PetaLinux project
+
+    * [X] polling synchronization
+
+    * [ ] interrupt synchronization
+
+      *TODO* `platform_get_resource(pdev, IORESOURCE_IRQ, 0)` returns `NULL` while probing the
+      device tree node
+
+* [X] Lab experience 
+  
+ 
+
 ## Contents
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
@@ -26,6 +56,7 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 <!-- code_chunk_output -->
 
 - [Contributors](#contributors)
+- [Project Advancement](#project-advancement)
 - [Contents](#contents)
 - [What is this?](#what-is-this)
 - [Getting Started](#getting-started)
