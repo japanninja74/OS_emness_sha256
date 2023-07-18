@@ -24,6 +24,11 @@ security.
 * [Exercises](#exercises)
 
     * [Exercise 1](#exercise-1)
+    * [Exercise 2](#exercise-2)
+    * [Exercise 3](#exercise-3)
+    * [Exercise 4](#exercise-4)
+    * [Exercise 5](#exercise-5)
+    * [Exercise 6](#exercise-6)
 
 * [License](#license)
 
@@ -326,6 +331,16 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 <p align="center">
 <img src="doc/hash_diagram.png" width="700">  
 </p>
+
+## Exercises
+Here are the proposed exercises. The solutions can be found in the "solution" folder of the repository.
+
+### Exercise 1
+### Exercise 2
+### Exercise 3
+### Exercise 4
+### Exercise 5
+### Exercise 6
 
 ## License
 
