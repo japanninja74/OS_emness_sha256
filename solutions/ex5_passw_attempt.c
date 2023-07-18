@@ -261,6 +261,8 @@ int main(int argc , char* argv[]) {
 	free(line);
 	fclose(fp);
 	fclose(hfp);
+	sem_destroy(&hash_sem);
+	sem_destroy(&read_sem);
 	exit(EXIT_SUCCESS);
 
 }
