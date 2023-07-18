@@ -106,7 +106,8 @@ void * hash_thread (void * arg){
 		else if (count != strlen(str))
 			fprintf(stderr, "write(): failed writing %d bytes\n", strlen(str));
 	}
-	
+
+	//This action of terminating the concatenation is needed to send the "last" signal
 	printf("terminate concatenation...\n");
 	if ((count = write(fd, NULL, 0)) < 0)
 		perror("write()");
@@ -119,61 +120,65 @@ void * hash_thread (void * arg){
 	if ((count = read(fd, read_hash, 32)) < 0)
 		perror("read()");
 	else if (count != 32)
-		fprintf(stderr, "read(): failed reading 32 bytes\n"); 
-	
-	/*for(int j=0; j<8;j++){
-		read_hash[j] = temp[j];
-	}*/
+		fprintf(stderr, "read(): failed reading 32 bytes\n");
 	
 
 	sem_post(&sem);
 	
 	close(fd);
 	fclose(tfp);
-	
+
+	//Returning the read hash
 	return (void*) read_hash;
 }
 
 
 
+
+
+
 int main(int argc, char * argv[]){
-	int N = atoi( argv[1] );
+	int N = argc-1; //Number of input files
 	pthread_t tid[N];
 	int i;
 	int flag =0;
 	unsigned * hash = NULL;
 	unsigned * cmp_hash = NULL;
-	
-	if(N < 2){
-		printf("\nMust check 2 or more files");
+
+	if(argc <2){
+		printf("You need to specify the names of the files to compare as input arguments");
 		return -1;
 	}
-	if(argc != N+2){
-		printf("\nYou asked for %d files but passed a different number",N);
+	if(argc == 2){
+		printf("\nMust check 2 or more files");
+		return -1;
 	}
 	
 	sem_init (&sem, 0, 1);
 		
 	for(i=0; i<N ; i++){
-		pthread_create (&tid[i], NULL, hash_thread, argv[i+2]);
+		pthread_create (&tid[i], NULL, hash_thread, argv[i+1]);
 		//Create one hash thread for each file
 	}
 	
-	//Taking the first hash as a reference for the comparison
+	//Taking the first returned hash as a reference for the comparison
 	pthread_join(tid[0], (void**)&cmp_hash);
-	printf("Hash of the reference file %s is: ",argv[2]);
+	printf("Hash of the reference file %s is: ",argv[1]);
 	print_hash(cmp_hash);
 	
 	for(int i=1; i<N; i++){
 		pthread_join(tid[i], (void**)&hash);
-		printf("Hash of the file %s is: ",argv[i+2]);
+		printf("Hash of the file %s is: ",argv[i+1]);
 		print_hash(hash);
 		//Waiting and comparing all hashes
 		if(compare_hash(cmp_hash,hash)){
-			printf("Found a difference in the file %s\n", argv[i+2]);
+			printf("Found a difference in the file %s\n", argv[i+1]);
+			//Saving that a file is different
 			flag =1;
-		}else{
-			flag = 0;
+			/*Here the for loop is not  terminating for 2 reason:
+				1)Need to terminate all threads
+				2)In this way in the output all different files are
+				printed (if there are more than one)*/
 		}
 	}
 	
@@ -194,7 +199,7 @@ int main(int argc, char * argv[]){
 }
 
 void print_hash(unsigned * hash){
-	//translates each character in hexadecimal
+	//reading each character in hexadecimal
 	for (int i = 0; i < 8; i++)
 		printf("%08X", (unsigned) hash[i]); 
 	
@@ -203,8 +208,10 @@ void print_hash(unsigned * hash){
 
 
 int compare_hash(unsigned * hash1, unsigned * hash2){
+	//Comparing all characters one by one
 	for(int i = 0;  i<8; i++){
 		if((unsigned) hash1[i] != (unsigned) hash2[i]){
+			//If 2 characters with the same index are different return immediately
 			return 1;
 		}
 	}
