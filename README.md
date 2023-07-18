@@ -45,8 +45,8 @@ so that the external device can be accessed by using the device driver we develo
 install Linux on a processing system can be easily found online. For example, if working on a Xilinx
 board, Linux OS can be installed through Petalinux tool. The exercises require the knowledge of the
 main system programming methods on Linux (system calls, files management, shared memory, message
-passing, threads, semaphores): to learn more about these topics you can find some useful material,
-for example this [book](https://www.os-book.com/OS10/). 
+passing, threads, semaphores): to learn more about these topics you can find some useful online material,
+for example [here](https://www.os-book.com/OS10/). 
 
 ## Getting Started
 The project targets the [TUL PYNQ-Z2](https://www.tulembedded.com/fpga/ProductsPYNQ-Z2.html) board,
