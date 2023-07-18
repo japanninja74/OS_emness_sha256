@@ -19,6 +19,8 @@ security.
 
     * [Baremetal Platform Test](#baremetal-platform-test)
 
+    * [PetaLinux Flow](#petalinux-flow)
+
 * [Exercises](#exercises)
 
     * [Exercise 1](#exercise-1)
@@ -51,6 +53,7 @@ vendor's documentation. The steps listed below quickly guide you through the pre
 from the design of the platform up to the compilation of the loadable kernel module.
 
 Before moving on, make sure to have the following tools available:
+
 * Vivado and Vitis design environments
 * Cable Drivers
 * PetaLinux
@@ -94,8 +97,10 @@ catalogue and wrapped as the top entity.
 
 ### Baremetal Platform Test
 Before tackling the linux development problem, a simple baremetal driver and a self-test programs
-are available in [`src/ip/api`](src/ip/api). To test the hardware design.
+are given in [`src/ip/api`](src/ip/api) to test the hardware platform.
+
 1. Open Vitis and specify a workspace directory.
+
 2. Create a *New Application Project* and choose the tab for creating a new platform from hardware,
    namely `out/EmnessSha256.xsa`. Keep the default selection to generate the boot components
 
@@ -104,7 +109,9 @@ are available in [`src/ip/api`](src/ip/api). To test the hardware design.
    </p>
 
 3. Enter a name for the project and keep the default selection of a single target processor core.
+
 4. Pick the *Empty Application (C)* and finish the wizard.
+
 5. In the *Explorer* tab, under `<project-name>_system/<project-name>` right click on `src` and
    select *Import Sources*
    
@@ -122,13 +129,49 @@ a custom hardware platform are summarized in the table below.
 | ----------- | ---- |
 | Create a PetaLinux project | `petalinux-create -t project` |
 | Initialize a PetaLinux project (for custom hardware only) | `petalinux-config--get-hw-description` |
-| Configure system-level options | `petalinux-config` |
-| Create user components | `petalinux-create -t COMPONENT` |
-| Configure U-Boot | `petalinux-config -c u-boot` |
 | Configure the Linux kernel | `petalinux-config -c kernel` |
 | Configure the root filesystem | `petalinux-config -c rootfs` |
+| Create user components | `petalinux-create -t COMPONENT` |
 | Build the system | `petalinux-build` |
 | Package for deploying the system | `petalinux-package` |
+
+1. Setup PetaLinux environment
+
+       source <petaLinux_tool_install_dir>/settings.sh
+
+2. Starting from the project root directory, create a PetaLinux project for custom hardware 
+
+        petalinux-create --type project --template zynq --name sha256peta
+        cd sha256peta
+        petalinux-config --get-hw-description ../out/EmnessSha256.xsa
+
+   A configuration menu opens. To make the root file system retain changes and to enable maximum
+   usage of available DDR memory, we are using the EXT4 format for a separate rootfs partition, and
+   FAT32 in the boot partition. 
+
+   *→ DTG Settings → Kernel Bootargs*:
+     * change *generate boot args automatically* to NO
+     * update *user set kernel bootargs* to 
+         
+           earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M
+         
+   *→ Image Packaging Configuration*:
+     * change *root filesystem type* to EXT4
+
+3. Configure the kernel by launching
+       
+       petalinux-config -c kernel
+
+   *→ CPU Power Management*: CPU IDLE causes the processors to get into IDLE state when the processor
+   is not in use. During project development it can be disabled to avoid interactions with debug
+   subsystems. 
+     * change *CPU Frequency scaling* to NO
+     * change *CPU Idle* to NO
+
+   *→ Device Drivers → Userspace I/O drivers*:
+     * change *Userspace platform driver with generic irq and dynamic memory* to YES
+
+
 
 ## License
 
@@ -148,6 +191,7 @@ a custom hardware platform are summarized in the table below.
 [sh-standard]: http://dx.doi.org/10.6028/NIST.FIPS.180-4 "FIPS PUB 180-4 Secure Hash Standard"
 [sha256-core]: https://opencores.org/projects/sha256_hash_core "SHA-256 HASH CORE"
 [amd-doc]: https://docs.xilinx.com/ "AMD Documentation Portal"
+[os-concepts]: https://www.os-book.com/OS10/ "Operating System Concepts"
 
 ## Conclusion
 
