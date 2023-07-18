@@ -30,6 +30,18 @@ security.
 * [Conclusion](#conclusion)
 
 ## What is this?
+The aim of this lab experience is to work on an environment made of a processor and an external
+hardware accelerator that implements the SHA 256 algorithm in an efficient way. The crypto core is
+described in VHDL, so that it can be implemented on a FPGA. Some memory-mapped registers have been
+designed: to make the system work, it is sufficient to connect these registers to processor bus and
+to assign them proper addresses.
+To develop the proposed exercises, it is required to install Linux operating system on the processor,
+so that the external device can be accessed by using the device driver we developed. Some tools to
+install Linux on a processing system can be easily found online. For example, if working on a Xilinx
+board, Linux OS can be installed through Petalinux tool. The exercises require the knowledge of the
+main system programming methods on Linux (system calls, files management, shared memory, message
+passing, threads, semaphores): to learn more about these topics you can find some useful material
+in the provided sources. 
 
 ## Getting Started
 The project targets the [TUL PYNQ-Z2](https://www.tulembedded.com/fpga/ProductsPYNQ-Z2.html) board,
