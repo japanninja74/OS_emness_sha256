@@ -167,7 +167,8 @@ int main(int argc , char* argv[]) {
 	
 	pthread_t *tid = malloc(1); /*Starting with 1 thread*/
 	
-        sem_init(&hash_sem, 0,0);
+        sem_init(&hash_sem, 0,1);
+	sem_init(&read_sem, 0,1);
         
         
         if (argc !=3){
