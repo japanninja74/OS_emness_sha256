@@ -423,6 +423,8 @@ Notice that the device is one, so the threads must have a semaphore to decide wh
 calculate the hash.
 Try to use the write with concatenation function for sending the files' content to the core.
 The hash comparison can be done in the main.
+
+Improvement: Try to keep everything generic and consider all input lenghts unknown
 #### Exercise 5
 Write a program who tries to find the correct password, recognising it from the
 expected hash. This program must read a list of password attempts from a file and the
