@@ -379,6 +379,14 @@ command through system() system call.
 ### Exercise 3
 ### Exercise 4
 ### Exercise 5
+Write a program that receives a list of files as input from command line (The number of files
+shouldn't be specified "a priori") and checks that they are equal.
+In particular the program must generate multiple threads (one for each file), that
+open the files, calculate the hashes using the provided hardware accellerator and returns it.
+Notice that the device is one, so the threads must have a semaphore to decide when to 
+calculate the hash.
+Try to use the write with concatenation function for sending the files' content to the core.
+The hash comparison can be done in the main.
 ### Exercise 6
 ### Exercise 7 - client loggin in a server
 
