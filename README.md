@@ -554,7 +554,7 @@ The program must then return the original password.
 
 Hint: use the return values of the threads.
 
-#### Exercise 6
+#### Exercise 6 - Pipe secure comunication
 Objective:
 
 The objective of this C program is to demonstrate secure communication between parent and
