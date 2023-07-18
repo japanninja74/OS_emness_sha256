@@ -184,7 +184,7 @@ digest (or hash) on a fixed number of bytes. The input message is divided into b
 divided into words. SHA-256 requires blocks of 512 bits (64 bytes), divided into 16 32-bit words. Some bits
 are added at the end of the message: the bit '1' is always appended, followed by some zeros, finally the lenght
 of the message (without the additional 1 and 0s) is expressed on 64 bits (thus the maximum length of the message
-is equal to $2^(64)$ bits, which is a really big size, unreachable from a practical point of view). The zeros
+is equal to $2^{64}$ bits, which is a really big size, unreachable from a practical point of view). The zeros
 between the '1' and the message length are added in order to have a padded message with a length equal to a
 multiple of 512 bits.
 
