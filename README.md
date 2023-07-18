@@ -433,6 +433,61 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 ### Exercises
 
 #### Exercise 1
+Objective:
+
+Develop a C program to perform a comprehensive self-test for a driver implementing the
+SHA256 hashing algorithm. The self-test program should rigorously validate the correctness
+and integrity of the SHA256 hashing algorithm under various scenarios, ensuring its
+robustness and reliability.
+
+Test Functions:
+
+Write: This is the basic instruction, where a word is written and a hash is read back.
+
+Concatenation: This test function will focus on testing the concatenation functionality of
+the SHA256 driver. It will write multiple data blocks to the driver and verify the resulting
+hash values. This test ensures that the SHA256 algorithm handles the concatenation of data
+correctly and produces accurate hash outputs.
+
+With_Seek: The With_Seek test function will evaluate the SHA256 driver's behavior when
+performing forward seeks in the data stream. It will write data blocks with forward seeks
+to different positions in the source file, validating the hash values at each seek position.
+Forward seek will result in a 0 padding while backward seed (rewind) will work as reset and
+generate the new_hash signal.
+This test ensures that the SHA256 algorithm can handle data writes with seeks accurately.
+
+Without_Seek: The Without_Seek test function will verify the SHA256 driver's capability to
+handle data writes without seeks. It will write data blocks sequentially without any seeks,
+ensuring the integrity of the hashing algorithm under continuous data input scenarios.
+
+Multi-Threading and Mutex:
+
+To ensure accurate and synchronized execution of the self-test process, the program will
+utilize multi-threading with pthread library. Specifically, the program will create three
+threads, each executing one of the three test functions (concatenation, With_Seek, and
+Without_Seek). The purpose of multi-threading is to parallelize the self-test, allowing
+simultaneous testing of different aspects of the SHA256 driver, which can significantly
+speed up the overall self-test process.
+
+A pthread_mutex_t variable named mutex will be used to implement mutual exclusion. The mutex
+will act as a synchronization mechanism to prevent potential data races and ensure that each
+test function executes exclusively without interfering with the others. Before executing a
+test function, the corresponding thread will lock the mutex using pthread_mutex_lock,
+ensuring exclusive access. Once the test function completes, the thread will unlock the
+mutex using pthread_mutex_unlock, allowing the next thread to proceed.
+
+Explanation:
+
+The purpose of the self-test program is to validate the correct implementation and
+functionality of the SHA256 driver. By running the test functions under different scenarios
+and comparing the generated hash values with precomputed hash values, the program can
+ensure that the SHA256 algorithm produces consistent and accurate results.
+
+Multi-threading enhances the efficiency of the self-test process by concurrently executing
+the test functions. Each thread independently tests a specific aspect of the SHA256 driver,
+leading to a faster overall self-test. The mutex ensures that each test function executes
+atomically without interference, preventing race conditions and guaranteeing the reliability
+of the test results.
 #### Exercise 2 - malloc()/realloc(), fork(), execl(), system()
 
 Write a C program that computes the hash of a file in two different ways: by using the accelerator
