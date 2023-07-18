@@ -285,7 +285,7 @@ makes the use of SHA algorithms so widespread is that it is almost impossible to
 from the digest (the only way is to try out a lot of input messages until the desired hash is found).
 
 To learn more about how the algorithm is implemented it is suggested to have a look
-[here](https://csrc.nist.gov/projects/hash-functions) or [here](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
+to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 
 <p align="center">
 <img src="doc/hash_diagram.png" width="700">  
