@@ -563,56 +563,22 @@ verification. The program aims to establish a secure communication channel betwe
 parent and child processes, ensuring that data is transmitted accurately.
 
 Explanation:
-
-	1.Named Pipe Creation: The program begins by creating a named pipe using the
-	   mkfifo() function. The named pipe is used for interprocess communication
-	   between the parent and child processes.
-
-	2.Parent Process:
-
-	   User Input: The parent process prompts the user to enter a message.
-
-	   Write to Pipe: The entered message is then sent to the child process through
-	   the named pipe using the write() function.
-
-	3.Child Process:
-
-           Read from Pipe: The child process reads the message sent by the parent
-	   processfrom the named pipe using the read() function.
-           SHA-256 Hash Calculation: A custom SHA-256 implementation is used to calculate
-	   the SHA-256 hash of the received message.
-
-           Write Hash to Pipe: The calculated hash is sent back to the parent process
-	   through the named pipe using the write() function.
-
-        4.Parent Process (Continued):
-
-	   Read Hash from Pipe: The parent process reads the received hash from the named
-	   pipe using the read() function.
-
-           SHA-256 Hash Verification: The program calculates the SHA-256 hash of the
-	   original message entered by the user.
-
-           Data Integrity Check: The received hash is compared with the expected hash.
-	   If they match, data integrity is verified, and a success 
-	   message is displayed otherwise, a failure message is shown.
-
-        5.Error Handling: The program handles various potential errors, such as pipe
-	   creation failure, read/write errors, and hash calculation errors.
-           Proper error messages are displayed to the user.
-
-        6.Secure Communication: The program adheres to best practices for secure
-	   communication by using appropriate permissions for the named pipe 
-           and ensuring secure data transmission between the parent and child processes.
-
-
-	By accomplishing these objectives, the program exemplifies a secure communication mechanism between parent and child processes, ensuring the 
-        integrity of transmitted data using custom SHA-256 hashing.
-
-
-
-
-
+1. Named Pipe Creation: The program begins by creating a named pipe using the mkfifo() function. The named pipe is used for interprocess communication between the parent and child processes.
+2. Parent Process:
+   User Input: The parent process prompts the user to enter a message.
+   Write to Pipe: The entered message is then sent to the child process through the named pipe using the write() function.
+3. Child Process:
+   Read from Pipe: The child process reads the message sent by the parent processfrom the named pipe using the read() function.
+   SHA-256 Hash Calculation: A custom SHA-256 implementation is used to calculate the SHA-256 hash of the received message.
+   Write Hash to Pipe: The calculated hash is sent back to the parent process through the named pipe using the write() function.
+4. Parent Process (Continued):
+   Read Hash from Pipe: The parent process reads the received hash from the named pipe using the read() function.
+   SHA-256 Hash Verification: The program calculates the SHA-256 hash of the original message entered by the user.
+   Data Integrity Check: The received hash is compared with the expected hash.
+   If they match, data integrity is verified, and a success message is displayed otherwise, a failure message is shown.
+5. Error Handling: The program handles various potential errors, such as pipe creation failure, read/write errors, and hash calculation errors. Proper error messages are displayed to the user.
+6. Secure Communication: The program adheres to best practices for secure communication by using appropriate permissions for the named pipe and ensuring secure data transmission between the parent and child processes.
+By accomplishing these objectives, the program exemplifies a secure communication mechanism between parent and child processes, ensuring the integrity of transmitted data using custom SHA-256 hashing.
 
 
 #### Exercise 7 - Client and Server
