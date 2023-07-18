@@ -460,15 +460,15 @@ for client input.
 There is no timeout set for each client's connection.
 
 Additionally, the program should provide the following functionalities for a shared folder
- on the server:
+on the server:
 
--List Directories: Use the "ls" command to retrieve a list of directories inside the shared
+- List Directories: Use the "ls" command to retrieve a list of directories inside the shared
  folder.
 
--Make Directory: Utilize the "system" system call "mkdir" to create a new directory within
+- Make Directory: Utilize the "system" system call "mkdir" to create a new directory within
 the shared folder.
 
-Download Content: Enable the download of text file contents while verifying its integrity
+- Download Content: Enable the download of text file contents while verifying its integrity
 using the SHA256 checksum. for the SHA256 you have to use the core through driver. 
 This functionality should utilize two separate threads: one for reading the file's content
 and another for calculating the hash. The second thread should execute after the first one,
@@ -476,6 +476,7 @@ and another for calculating the hash. The second thread should execute after the
 
 To prevent concurrent access to files in the shared folder by multiple clients, employ a
 mutex and also use mutex to prevent multiple access to the crypto core.
+
 #### Exercise 4
 Write a program that receives a list of files as input from command line (The number of files
 shouldn't be specified "a priori") and checks that they are equal.
@@ -487,6 +488,7 @@ Try to use the write with concatenation function for sending the files' content 
 The hash comparison can be done in the main.
 
 Improvement: Try to keep everything generic and consider all input lenghts unknown
+
 #### Exercise 5
 Write a program who tries to find the correct password, recognising it from the
 expected hash. This program must read a list of password attempts from a file and the
@@ -496,6 +498,7 @@ using the device driver (/dev/sha256) and compares the calculated hash with the 
 The program must then return the original password.
 
 Hint: use the return values of the threads.
+
 #### Exercise 6
 #### Exercise 7
 In order to simulate a login operation write two C programs, representing server and client. The former waits for email and password given by the client and after having verified that email is present in a pre-formed database, calculates the hash of the password and compare it with the other hashes in the database. The latter waits instead for server response, which can be "email not found", "wrong password" or "access granted". Enrich server capabilities using an arbitrary number of threads which represent the maximum number contemporary login attempts to the server. Simulate that using multiple executions of the same client executable file. Remember that in the server is present only one cryptocore.
