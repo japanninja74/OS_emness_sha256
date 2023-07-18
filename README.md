@@ -41,7 +41,7 @@ to assign them proper addresses.
 To develop the proposed exercises, it is required to install Linux operating system on the processor,
 so that the external device can be accessed by using the device driver we developed. Some tools to
 install Linux on a processing system can be easily found online. For example, if working on a Xilinx
-board, Linux OS can be installed through Petalinux tool. The exercises require the knowledge of the
+board, Linux OS can be installed through PetaLinux tool. The exercises require the knowledge of the
 main system programming methods on Linux (system calls, files management, shared memory, message
 passing, threads, semaphores): to learn more about these topics you can find some useful material
 in the provided sources. 
@@ -68,7 +68,7 @@ Then, run a clone:
 
     git clone https://github.com/fscatox/emness_sha256.git
 
-and change into the newly created preject directory:
+and change into the newly created project directory:
 
     cd /path/to/emness_sha256
 
@@ -84,7 +84,7 @@ The output is generated in the `out/` folder. Notice that the critical warnings 
 
 Inside [`src/ip/hdl`](src/ip/hdl) you can examine 
 the RTL description of the open source crypto core retrieved from Jonny Doin's 
-[project][sha256-core]. Altough it's a stream hash engine, for simplicity it's wrapped as an 
+[project][sha256-core]. Although it's a stream hash engine, for simplicity it's wrapped as an 
 AXI4 peripheral with a Lite interface: this is where the peripheral register file and the 
 synchronization mechanisms are implemented. 
 
@@ -194,7 +194,7 @@ a custom hardware platform are summarized in the table below.
 
        petalinux-create -t modules --name sha256 --enable
 
-   Starting from project root, change to the newly created module directory:
+   Starting from PetaLinux project root, change to the newly created module directory:
 
        cd project-spec/meta-user/recipes-modules/sha256
 
@@ -202,7 +202,7 @@ a custom hardware platform are summarized in the table below.
 
        petalinux-build
 
-7. Customize the device tree. In your favorite text editor, starting from project root, open:
+7. Customize the device tree. In your favorite text editor, starting from PetaLinux project root, open:
       
        components/plnx_workspace/device-tree/device-tree/pl.dtsi 
 
@@ -220,7 +220,7 @@ a custom hardware platform are summarized in the table below.
         petalinux-build -c device-tree
         petalinux-build
 
-   If you want to make sure that the changes was applied, starting from the proect root change to:
+   If you want to make sure that the changes was applied, starting from the PetaLinux project root change to:
      
         images/linux
 
@@ -234,7 +234,7 @@ a custom hardware platform are summarized in the table below.
    
    Finally, you can open `device_tree_out.dts` and locate the `amba_pl` device node.
 
-8. To cross-compile the kernel module, starting from the proect root, change to:
+8. To cross-compile the kernel module, starting from the project root, change to:
        
         project-spec/meta-user/recipes-modules/sha256
 
@@ -255,12 +255,48 @@ a custom hardware platform are summarized in the table below.
                    file://sha256.h \
                    file://COPYING \
                   "
-9. 
+
+   Finally, launch:
+
+        petalinux-build
+
+   The compiled module is located somewhere within the PetaLinux folder; from the PetaLinux project root
+
+        find -name "sha256.ko"
+
+   should tell you exactly where.
+
+9. Package for deploying the system. The preliminary step is to partition the SD card:
+
+     * ~ 200 MB for the FAT32 bootable partition
+
+     * the remaining space as EXT4 root file system partition
+
+   Feel free to use any tool you'd like, the [UG1144][amd-doc] manual suggests a procedure
+   employing `fdisk`. 
+
+   To generate the files suitable to deployment from SD card, from the PetaLinux project root change
+   into:
+
+       images/linux/
+
+   run:
+       
+       petalinux-package --boot --fsbl zynq_fsbl.elf --fpga system.bit --u-boot --force
+
+   Then:
+     * copy `BOOT.BIN`, `image.ub`, and `boot.scr` to the bootable partition
+     * extract `rootfs.tar.gz` to the root file system partition; assuming the partition is mounted
+       in `/media/rootfs`, the command would be:
+           
+           sudo tar xvfp rootfs.tar.gz -C /media/rootfs
+     * copy the module to `/media/rootfs/home/root`. You will have it available when booting up the
+       system.  
 
 
 ## The algorithm
 Before presenting the exercises, let's make an overview of the algorithm implemented in the crypto core,
- so that everybody can understand what we are performing. 
+so that everybody can understand what we are performing. 
 
 The algorithm is the SHA-256 (Secure Hash Algorithm 256), one of the cryptographic hash functions designed
 by the United States National Security Agency (NSA). All the SHA algorithms work in a similar way: they
