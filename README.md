@@ -35,6 +35,7 @@ hardware accelerator that implements the SHA 256 algorithm in an efficient way. 
 described in VHDL, so that it can be implemented on a FPGA. Some memory-mapped registers have been
 designed: to make the system work, it is sufficient to connect these registers to processor bus and
 to assign them proper addresses.
+
 To develop the proposed exercises, it is required to install Linux operating system on the processor,
 so that the external device can be accessed by using the device driver we developed. Some tools to
 install Linux on a processing system can be easily found online. For example, if working on a Xilinx
