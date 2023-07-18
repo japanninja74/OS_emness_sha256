@@ -21,6 +21,8 @@ security.
 
     * [PetaLinux Flow](#petalinux-flow)
 
+* [The algorithm](#the-algorithm)
+
 * [Exercises](#exercises)
 
     * [Exercise 1](#exercise-1)
@@ -43,8 +45,8 @@ so that the external device can be accessed by using the device driver we develo
 install Linux on a processing system can be easily found online. For example, if working on a Xilinx
 board, Linux OS can be installed through Petalinux tool. The exercises require the knowledge of the
 main system programming methods on Linux (system calls, files management, shared memory, message
-passing, threads, semaphores): to learn more about these topics you can find some useful material
-in the provided sources. 
+passing, threads, semaphores): to learn more about these topics you can find some useful material,
+for example this [book](https://www.os-book.com/OS10/). 
 
 ## Getting Started
 The project targets the [TUL PYNQ-Z2](https://www.tulembedded.com/fpga/ProductsPYNQ-Z2.html) board,
@@ -171,6 +173,33 @@ a custom hardware platform are summarized in the table below.
    *→ Device Drivers → Userspace I/O drivers*:
      * change *Userspace platform driver with generic irq and dynamic memory* to YES
 
+## The algorithm
+Before presenting the exercises, let's make an overview of the algorithm implemented in the crypto core,
+ so that everybody can understand what we are performing. 
+
+The algorithm is the SHA-256 (Secure Hash Algorithm 256), one of the cryptographic hash functions designed
+by the United States National Security Agency (NSA). All the SHA algorithms work in a similar way: they
+take as input a message of indefinite length (for example, a file content) and they deliver as output a
+digest (or hash) on a fixed number of bytes. The input message is divided into blocks and each block is then
+divided into words. SHA-256 requires blocks of 512 bits (64 bytes), divided into 16 32-bit words. Some bits
+are added at the end of the message: the bit '1' is always appended, followed by some zeros, finally the lenght
+of the message (without the additional 1 and 0s) is expressed on 64 bits (thus the maximum length of the message
+is equal to $2^(64)$ bits, which is a really big size, unreachable from a practical point of view). The zeros
+between the '1' and the message length are added in order to have a padded message with a length equal to a
+multiple of 512 bits.
+
+The hash is on 256 bits (32 bytes), divided into 8 32-bit words. One message block at a time is sent to the
+algorithm: the hash computed for each block is used as the starting point to compute the hash for the following
+block. The hash for the first block is computed starting from an initial hash, defined by the algorithm standard
+(it is obtained by taking the first 32 bits of the fractional parts of the square root of the first 8 prime
+numbers). After last block is read, the algorithm provides the final hash.
+
+Cryptographic functions like the SHA-256 can be used for a lot of applications, for example to verify the integrity
+of a message or file, to verify the correctness of a password or to reliably identify a file. The key feature that
+makes the use of SHA algorithms so widespread is that it is almost impossible to get the initial message starting
+from the digest (the only way is to try out a lot of input messages until the corresponding hash is found).
+
+To learn more about how the algorithm is implemented it is suggested to have a look [here](https://csrc.nist.gov/projects/hash-functions) or [here](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 
 
 ## License
