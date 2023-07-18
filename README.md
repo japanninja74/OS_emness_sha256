@@ -333,7 +333,7 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 </p>
 
 ## Exercises
-Here are the proposed exercises. The solutions can be found in the "solution" folder of the repository.
+Here are the proposed exercises. The solutions can be found in the "solutions" folder of the repository.
 
 ### Exercise 1
 ### Exercise 2
