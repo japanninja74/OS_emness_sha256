@@ -1,4 +1,6 @@
-# SHA-256 Core Linux Driver on a ZYNQ APSoC <img src="doc/emness_logo.png" width="100">  
+# SHA-256 Core Linux Driver on a ZYNQ APSoC 
+
+<img src="doc/emness_logo.png" width="100">  
 
 Open access lab experience as an introduction to the development of Linux/FreeRTOS device drivers
 for hardware accelerators.
@@ -7,7 +9,7 @@ The idea comes from the [EMNESS](https://emness.eu) initiative, with the goal to
 innovative academic curriculum on reliability and hardware security. The project is submitted as
 part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 
-### Contributors
+## Contributors
 
 [Fabio Scatozza](mailto:s315216@studenti.polito.it),
 [Isacco Delpero](mailto:s314713@studenti.polito.it>),
@@ -19,29 +21,34 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 
 ## Contents
 
-* [What is this?](#what-is-this)
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
-* [Getting started](#getting-started)
+<!-- code_chunk_output -->
 
-    * [Generating the Hardware Design](#generating-the-hardware-design)
+- [Contributors](#contributors)
+- [Contents](#contents)
+- [What is this?](#what-is-this)
+- [Getting Started](#getting-started)
+  - [Generating the Hardware Design](#generating-the-hardware-design)
+  - [Baremetal Platform Test](#baremetal-platform-test)
+  - [PetaLinux Flow](#petalinux-flow)
+- [Deploy from Release](#deploy-from-release)
+- [Usage](#usage)
+- [The Lab Experience](#the-lab-experience)
+  - [The algorithm](#the-algorithm)
+  - [The Programmer's Model](#the-programmers-model)
+  - [Exercises](#exercises)
+    - [Exercise 1](#exercise-1)
+    - [Exercise 2 - malloc()/realloc(), fork(), execl(), system()](#exercise-2---mallocrealloc-fork-execl-system)
+    - [Exercise 3](#exercise-3)
+    - [Exercise 4](#exercise-4)
+    - [Exercise 5](#exercise-5)
+    - [Exercise 6](#exercise-6)
+    - [Exercise 7](#exercise-7)
+- [License](#license)
+- [Sources](#sources)
 
-    * [Baremetal Platform Test](#baremetal-platform-test)
-
-    * [PetaLinux Flow](#petalinux-flow)
-
-* [Exercises](#exercises)
-
-    * [Exercise 1](#exercise-1)
-    * [Exercise 2](#exercise-2)
-    * [Exercise 3](#exercise-3)
-    * [Exercise 4](#exercise-4)
-    * [Exercise 5](#exercise-5)
-    * [Exercise 6](#exercise-6)
-    * [Exercise 7](#exercise-7)
-
-* [License](#license)
-
-* [Sources](#sources)
+<!-- /code_chunk_output -->
 
 ## What is this?
 The aim of this lab experience is to work on an environment made of a processor and an external
@@ -61,8 +68,11 @@ in the provided sources.
 ## Getting Started
 The project targets the [TUL PYNQ-Z2](https://www.tulembedded.com/fpga/ProductsPYNQ-Z2.html) board,
 but other all programmable SoC architectures can be used by adapting the flow according to the
-vendor's documentation. The steps listed below quickly guide you through the preliminary steps,
+vendor's documentation. The steps listed below guide you through the development steps,
 from the design of the platform up to the compilation of the loadable kernel module.
+
+To quickly setup the lab environment, download the latest release. Unpack it and jump to
+[Deploy from Release](#deploy-from-release).
 
 Before moving on, make sure to have the following tools available:
 
@@ -328,11 +338,31 @@ a custom hardware platform are summarized in the table below.
      * copy the module to `/media/rootfs/home/root`. You will have it available when booting up the
        system.  
 
+## Deploy from Release
+As a preliminary step, partition the SD card with the following scheme:
+* ~ 200 MB for the FAT32 bootable partition
+* the remaining space as EXT4 root file system partition
 
-## The algorithm
-Before presenting the exercises, let's make an overview of the algorithm implemented in the crypto core,
-so that everybody can understand what we are performing. 
+Feel free to use any tool you'd like, the [UG1144][amd-doc] manual suggests a procedure
+employing `fdisk`. 
 
+After having downloaded the release, unpack it and then:
+* copy `BOOT.BIN`, `image.ub`, and `boot.scr` to the bootable partition
+* extract `rootfs.tar.gz` to the root file system partition; assuming the partition is mounted
+in `/media/rootfs`, the command would be:
+    
+    sudo tar xvfp rootfs.tar.gz -C /media/rootfs
+
+## Usage
+
+TODO: how to connect to the board.
+
+## The Lab Experience
+Now it's your turn! Read the next sections then dive into the exercises. Strive to devise
+efficient, elegant and innovative solutions and if feel stuck, have a look at
+[`solutions`](solutions).
+
+### The algorithm
 The algorithm is the SHA-256 (Secure Hash Algorithm 256), one of the cryptographic hash functions designed
 by the United States National Security Agency (NSA). All the SHA algorithms work in a similar way: they
 take as input a message of indefinite length (for example, a file content) and they deliver as output a
@@ -350,22 +380,29 @@ block. The hash for the first block is computed starting from an initial hash, d
 numbers). After last block is read, the algorithm provides the final hash.
 
 Cryptographic functions like the SHA-256 can be used for a lot of applications, for example to verify the integrity
-of a message or file, to verify the correctness of a password or to reliably identify a file. The key feature that
-makes the use of SHA algorithms so widespread is that it is almost impossible to get the initial message starting
-from the digest (the only way is to try out a lot of input messages until the desired hash is found).
+of a message or file, to verify the correctness of a password or to reliably identify a file. They are called
+secure because, for a given algorithm, it is computationally infeasible:
+ * to find a message that corresponds to a given message digest, or
+ * to find two different messages that produce the same message digest. 
 
 To learn more about how the algorithm is implemented it is suggested to have a look
 to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 
 <p align="center">
-<img src="doc/hash_diagram.png" width="700">  
+<img src="doc/hash_diagram.png" width="800">  
 </p>
 
-## Exercises
-Here are the proposed exercises. The solutions can be found in the "solutions" folder of the repository.
+### The Programmer's Model
 
-### Exercise 1
-### Exercise 2 - malloc()/realloc(), fork(), execl(), system()
+| Register Name | Bit Field and Description          |
+|---------------|------------------------------------|
+| CSR           | <table><thead><tr><th>31</th><th>30</th><th>29</th><th>10</th><th>9</th><th>8</th><th>7:4</th><th>3:2</th><th>1</th><th>0</th></tr></thead><tbody><tr><td>ERR</td><td>DONE</td><td>BLOCKREAD</td><td>IENABLE</td><td>WR</td><td>LAST</td><td>LASTWORD</td><td>VALIDBYTE</td><td>NEWHASH</td><td>COREENABLE</td></tr></tbody></table>ERR:<br/>DONE:<br/>BLOCKREAD:<br/>IENABLE:<br/>WR:<br/>LAST:<br/>LASTWORD:<br/>VALIDBYTE:<br/>NEWHASH:<br/>COREENABLE:
+| WXX           | W0: most significant word of the 512-bit block <br/>W15: least significant word of the 512 bit block. 
+| HX            | H7: most significant word of the 256-bit hash <br/>H0: least significant word of the 256-bit hash                                    
+### Exercises
+
+#### Exercise 1
+#### Exercise 2 - malloc()/realloc(), fork(), execl(), system()
 
 Write a C program that computes the hash of a file in two different ways: by using the accelerator
 and by using Linux command "sha256sum". The file is of unknown size, so dynamic memory allocation must be used
@@ -376,9 +413,9 @@ termination. Then the two hashes are read and compared: a success (if they are e
 different) message must be printed on the screen. Finally, hash.txt file must be removed by invoking "rm" Linux
 command through system() system call.
  
-### Exercise 3
-### Exercise 4
-### Exercise 5
+#### Exercise 3
+#### Exercise 4
+#### Exercise 5
 Write a program that receives a list of files as input from command line (The number of files
 shouldn't be specified "a priori") and checks that they are equal.
 In particular the program must generate multiple threads (one for each file), that
@@ -387,14 +424,16 @@ Notice that the device is one, so the threads must have a semaphore to decide wh
 calculate the hash.
 Try to use the write with concatenation function for sending the files' content to the core.
 The hash comparison can be done in the main.
-### Exercise 6
-### Exercise 7 - client loggin in a server
-
+#### Exercise 6
+#### Exercise 7
 In order to simulate a login operation write two C programs, representing server and client. The former waits for email and password given by the client and after having verified that email is present in a pre-formed database, calculates the hash of the password and compare it with the other hashes in the database. The latter waits instead for server response, which can be "email not found", "wrong password" or "access granted". Enrich server capabilities using an arbitrary number of threads which represent the maximum number contemporary login attempts to the server. Simulate that using multiple executions of the same client executable file. Remember that in the server is present only one cryptocore.
 
 ## License
 
-[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+Code: [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+
+Documentation: [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/)
+
 
 ## Sources
 [Hash Functions][hash-functions] -
