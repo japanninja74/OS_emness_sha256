@@ -1,13 +1,21 @@
-# SHA-256 Core Linux Driver on a ZYNQ APSoC 
+# SHA-256 Core Linux Driver on a ZYNQ APSoC <img src="doc/emness_logo.png" width="100">  
 
-Open access lab experience as an introduction to the development of
-Linux/FreeRTOS device drivers for hardware accelerators.
+Open access lab experience as an introduction to the development of Linux/FreeRTOS device drivers
+for hardware accelerators.
 
-The idea comes from the [EMNESS](https://emness.eu) initiative, with the goal
-of structuring innovative academic curricula on reliability and hardware
-security.
+The idea comes from the [EMNESS](https://emness.eu) initiative, with the goal to structure an
+innovative academic curriculum on reliability and hardware security. The project is submitted as
+part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 
-<img src="doc/emness_logo.png" width="100">  
+### Contributors
+
+[Fabio Scatozza](mailto:s315216@studenti.polito.it),
+[Isacco Delpero](mailto:s314713@studenti.polito.it>),
+[Leonardo Cerruti](mailto:s317664@studenti.polito.it>),
+[Claudio Capobianchi](mailto:s319187@studenti.polito.it>), 
+[Saman Alipour](mailto:s307980@studenti.polito.it>),
+[Abdul Rehman](mailto:s315198@studenti.polito.it>), and
+[Stephano Perera](mailto:s313080@studenti.polito.it>)
 
 ## Contents
 
@@ -33,8 +41,6 @@ security.
 * [License](#license)
 
 * [Sources](#sources)
-
-* [Conclusion](#conclusion)
 
 ## What is this?
 The aim of this lab experience is to work on an environment made of a processor and an external
@@ -124,7 +130,30 @@ are given in [`src/ip/api`](src/ip/api) to test the hardware platform.
    <img src="doc/vitis_importsrc.png" width="700">  
    </p>
 
-6. In the *Assistant* tab, select the `<project-name>_system` entry and hit *Run*.
+6. In the *Assistant* tab, select the `<project-name>_system` entry and hit *Run*. The expected
+   output is: 
+       
+        ################################
+        # gv_sha256 self test
+        # NIST-ADDITIONAL-SHA256: n. 7
+        ################################
+
+        Starting polling test...
+
+        Hash: D29751F2_649B32FF_572B5E0A_9F541EA6_60A50F94_FF0BEEDF_B0B692B9_24CC8025
+
+        Test passed...
+
+        ################################
+
+        Starting interrupt test...
+
+        Configuration done...
+
+        Hash: D29751F2_649B32FF_572B5E0A_9F541EA6_60A50F94_FF0BEEDF_B0B692B9_24CC8025
+
+        Test passed...
+
 
 ### PetaLinux Flow
 The PetaLinux flow is extensively documented in the reference guide [UG1144][amd-doc]. The steps for
@@ -372,6 +401,4 @@ command through system() system call.
 [sha256-core]: https://opencores.org/projects/sha256_hash_core "SHA-256 HASH CORE"
 [amd-doc]: https://docs.xilinx.com/ "AMD Documentation Portal"
 [os-concepts]: https://www.os-book.com/OS10/ "Operating System Concepts"
-
-## Conclusion
 
