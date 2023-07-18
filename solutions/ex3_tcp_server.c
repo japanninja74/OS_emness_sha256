@@ -1,5 +1,5 @@
 /**
- * File              : ex3_tcp_server.c
+ * File              : Tcp_server.c
  *                     
  * Authors           : Fabio Scatozza      <s315216@studenti.polito.it>
  *                     Isacco Delpero      <s314713@studenti.polito.it>
@@ -12,9 +12,9 @@
  * Date              : 14.07.2023
  * Last Modified Date: 18.07.2023
  * Description		 : This program constructs a TCP server capable of concurrently handling multiple clients using multithreading. 
- *		           It offers various functions to clients for interacting with a shared folder on the server, such as listing 
- *		           files (Ls), creating directories (mkdir), and downloading file contents while verifying their integrity 
- *		           using the SHA256 checksum.
+ *					   It offers various functions to clients for interacting with a shared folder on the server, such as listing 
+ *				   	   files (Ls), creating directories (mkdir), and downloading file contents while verifying their integrity 
+ *					   using the SHA256 checksum.
  *
  * Copyright (c) 2023
  *
@@ -75,7 +75,7 @@ void respond_client(char *msg, int socket);
 void *Read_file(void *arg);
 void *cal_hash(void *arg);
 void* handleClient(void* arg);
-void Read_calculated_hash(int fd, int socketNumber);
+void Read_calculated_hash(int fd, int clientSlot);
 
 int main() {
     int serverSocket, newSocket, clientLength;
@@ -209,7 +209,7 @@ void *cal_hash(void *arg){
 	perror("write()");
 	else if (count != strlen(message))
 	fprintf(stderr, "write(): failed writing bytes\n");
-	Read_calculated_hash(fd,clientsocket1);												//read output of the driver 
+	Read_calculated_hash(fd,clientSlot);												//read output of the driver 
 	printf("################################\n");
 	close(fd); 
 	pthread_mutex_unlock(&mutex_core);							//unlock access to the core
@@ -293,7 +293,7 @@ void* handleClient(void* arg) {
 	}
 }
 
-void Read_calculated_hash(int fd, int socketNumber) {
+void Read_calculated_hash(int fd, int clientSlot) {
   long count;
   unsigned hash_read[8];
   if ((count = read(fd, hash_read, 32)) < 0)						//Reading of calculated hash
@@ -302,7 +302,8 @@ void Read_calculated_hash(int fd, int socketNumber) {
     fprintf(stderr, "read(): failed reading 32 bytes\n");
   else {
   for(int i=0;i<8;i++){
-	  sprintf(&hex_digest[socketNumber][i*8], "%08X", hash_read[i]);	//save them as hexadecimal value in an array
+	  sprintf(&hex_digest[clientSlot][i*8], "%08X", hash_read[i]);	//save them as hexadecimal value in an array
 	}
+	printf("%s\n",hex_digest[clientSlot]);
   }
 } 
