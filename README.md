@@ -414,6 +414,37 @@ different) message must be printed on the screen. Finally, hash.txt file must be
 command through system() system call.
  
 #### Exercise 3
+Develop a program that constructs a TCP server using the socket system call. 
+A TCP server is a type of network server that uses the TCP protocol for communication. 
+TCP is one of the core protocols of the Internet Protocol Suite and provides reliable, 
+ordered, and error-checked delivery of data between networked devices.
+
+The socket system call allows the program to establish a communication endpoint, commonly
+known as a socket, that can send and receive data over a network.
+
+The program should accept the number of clients as a parameter and be capable of 
+concurrently handling multiple clients using multithreading.
+Each client's thread should wait for a termination message; otherwise, it should listen
+for client input. 
+There is no timeout set for each client's connection.
+
+Additionally, the program should provide the following functionalities for a shared folder
+ on the server:
+
+-List Directories: Use the "ls" command to retrieve a list of directories inside the shared
+ folder.
+
+-Make Directory: Utilize the "system" system call "mkdir" to create a new directory within
+the shared folder.
+
+Download Content: Enable the download of text file contents while verifying its integrity
+using the SHA256 checksum. for the SHA256 you have to use the core through driver. 
+This functionality should utilize two separate threads: one for reading the file's content
+and another for calculating the hash. The second thread should execute after the first one,
+ and synchronization should be achieved using a semaphore.
+
+To prevent concurrent access to files in the shared folder by multiple clients, employ a
+mutex and also use mutex to prevent multiple access to the crypto core.
 #### Exercise 4
 Write a program that receives a list of files as input from command line (The number of files
 shouldn't be specified "a priori") and checks that they are equal.
