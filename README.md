@@ -307,12 +307,11 @@ The algorithm is the SHA-256 (Secure Hash Algorithm 256), one of the cryptograph
 by the United States National Security Agency (NSA). All the SHA algorithms work in a similar way: they
 take as input a message of indefinite length (for example, a file content) and they deliver as output a
 digest (or hash) on a fixed number of bytes. The input message is divided into blocks and each block is then
-divided into words. SHA-256 requires blocks of 512 bits (64 bytes), divided into 16 32-bit words. Some bits
-are added at the end of the message: the bit '1' is always appended, followed by some zeros, finally the lenght
-of the message (without the additional 1 and 0s) is expressed on 64 bits (thus the maximum length of the message
-is equal to $2^{64}$ bits, which is a really big size, unreachable from a practical point of view). The zeros
-between the '1' and the message length are added in order to have a padded message with a length equal to a
-multiple of 512 bits.
+divided into words. SHA-256 requires blocks of 512 bits (64 bytes), divided into 16 32-bit words. The message
+length (on 64 bits) is appended at the end of the message (thus the maximum length of the message is equal to
+$2^{64}$ bits, which is a really big size, unreachable from a practical point of view). Between the message and
+the length a ‘1’ bit is added followed by as many zeros as needed to have an overall message with a length equal
+to a multiple of 512 bits.
 
 The hash is on 256 bits (32 bytes), divided into 8 32-bit words. One message block at a time is sent to the
 algorithm: the hash computed for each block is used as the starting point to compute the hash for the following
