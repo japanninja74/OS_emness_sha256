@@ -47,7 +47,7 @@ To develop the proposed exercises, it is required to install Linux operating sys
 so that the external device can be accessed by using the device driver we developed. Some tools to
 install Linux on a processing system can be easily found online. For example, if working on a Xilinx
 board, Linux OS can be installed through PetaLinux tool. The exercises require the knowledge of the
-main system programming methods on Linux (system calls, files management, shared memory, message
+main system programming methods on Linux (system calls, files management, shared memory, pipes, message
 passing, threads, semaphores): to learn more about these topics you can find some useful material
 in the provided sources. 
 
@@ -336,7 +336,17 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 Here are the proposed exercises. The solutions can be found in the "solutions" folder of the repository.
 
 ### Exercise 1
-### Exercise 2
+### Exercise 2 - malloc()/realloc(), fork(), execl(), system()
+
+Write a C program that computes the hash of a file in two different ways: by using the accelerator
+and by using Linux command "sha256sum". The file is of unknown size, so dynamic memory allocation must be used
+while reading it. After having stored the file content into a buffer, a fork() system call must be executed: the
+child process must invoke "sha256sum" command through a execl() system call (and redirect the output to a file
+named hash.txt), whereas the parent process must access the external crypto core and then wait for the child
+termination. Then the two hashes are read and compared: a success (if they are equal) or failure (if they are
+different) message must be printed on the screen. Finally, hash.txt file must be removed by invoking "rm" Linux
+command through system() system call.
+ 
 ### Exercise 3
 ### Exercise 4
 ### Exercise 5
@@ -354,6 +364,8 @@ Here are the proposed exercises. The solutions can be found in the "solutions" f
 [SHA-256 Core][sha256-core] - 
 
 [AMD Documentation Portal][amd-doc] - 
+
+[OS Concepts][os-concepts] -
 
 [//]: # "Source definitions"
 [hash-functions]: https://csrc.nist.gov/projects/hash-functions "Hash Functions by NIST CSRC"
