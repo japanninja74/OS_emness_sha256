@@ -415,7 +415,6 @@ command through system() system call.
  
 #### Exercise 3
 #### Exercise 4
-#### Exercise 5
 Write a program that receives a list of files as input from command line (The number of files
 shouldn't be specified "a priori") and checks that they are equal.
 In particular the program must generate multiple threads (one for each file), that
@@ -424,6 +423,15 @@ Notice that the device is one, so the threads must have a semaphore to decide wh
 calculate the hash.
 Try to use the write with concatenation function for sending the files' content to the core.
 The hash comparison can be done in the main.
+#### Exercise 5
+Write a program who tries to find the correct password, recognising it from the
+expected hash. This program must read a list of password attempts from a file and the
+expected hash from another file, both given by command line. It then creates multiple
+threads (one per password attempt). Each thread calculates the hash of one password attempt
+using the device driver (/dev/sha256) and compares the calculated hash with the expected one.
+The program must then return the original password.
+
+Hint: use the return values of the threads.
 #### Exercise 6
 #### Exercise 7
 In order to simulate a login operation write two C programs, representing server and client. The former waits for email and password given by the client and after having verified that email is present in a pre-formed database, calculates the hash of the password and compare it with the other hashes in the database. The latter waits instead for server response, which can be "email not found", "wrong password" or "access granted". Enrich server capabilities using an arbitrary number of threads which represent the maximum number contemporary login attempts to the server. Simulate that using multiple executions of the same client executable file. Remember that in the server is present only one cryptocore.
