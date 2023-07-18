@@ -1,5 +1,5 @@
 /**
- * File              : self_test.c
+ * File              : ex5_passw_attempt.c
  *                     
  * Authors           : Fabio Scatozza      <s315216@studenti.polito.it>
  *                     Isacco Delpero      <s314713@studenti.polito.it>
