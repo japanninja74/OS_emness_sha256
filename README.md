@@ -35,7 +35,7 @@ security.
 
 ## What is this?
 The aim of this lab experience is to work on an environment made of a processor and an external
-hardware accelerator that implements the SHA 256 algorithm in an efficient way. The crypto core is
+hardware accelerator that implements the SHA 256 algorithm in a fast and efficient way. The crypto core is
 described in VHDL, so that it can be implemented on a FPGA. Some memory-mapped registers have been
 designed: to make the system work, it is sufficient to connect these registers to processor bus and
 to assign them proper addresses.
