@@ -432,7 +432,7 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 | HX            | H7: most significant word of the 256-bit hash <br/>H0: least significant word of the 256-bit hash                                    
 ### Exercises
 
-#### Exercise 1
+#### Exercise 1 - Testing all the driver functionalities
 Objective:
 
 Develop a C program to perform a comprehensive self-test for a driver implementing the
@@ -499,7 +499,7 @@ termination. Then the two hashes are read and compared: a success (if they are e
 different) message must be printed on the screen. Finally, hash.txt file must be removed by invoking "rm" Linux
 command through system() system call.
  
-#### Exercise 3
+#### Exercise 3 - TCP server
 Develop a program that constructs a TCP server using the socket system call. 
 A TCP server is a type of network server that uses the TCP protocol for communication. 
 TCP is one of the core protocols of the Internet Protocol Suite and provides reliable, 
@@ -532,7 +532,7 @@ and another for calculating the hash. The second thread should execute after the
 To prevent concurrent access to files in the shared folder by multiple clients, employ a
 mutex and also use mutex to prevent multiple access to the crypto core.
 
-#### Exercise 4
+#### Exercise 4 - File comparison using multithreading and semaphores
 Write a program that receives a list of files as input from command line (The number of files
 shouldn't be specified "a priori") and checks that they are equal.
 In particular the program must generate multiple threads (one for each file), that
@@ -544,7 +544,7 @@ The hash comparison can be done in the main.
 
 Improvement: Try to keep everything generic and consider all input lenghts unknown
 
-#### Exercise 5
+#### Exercise 5 - Password finder from a hash
 Write a program who tries to find the correct password, recognising it from the
 expected hash. This program must read a list of password attempts from a file and the
 expected hash from another file, both given by command line. It then creates multiple
@@ -555,7 +555,7 @@ The program must then return the original password.
 Hint: use the return values of the threads.
 
 #### Exercise 6
-#### Exercise 7
+#### Exercise 7 - Client and Server
 In order to simulate a login operation write two C programs, representing server and client. The former waits for email and password given by the client and after having verified that email is present in a pre-formed database, calculates the hash of the password and compare it with the other hashes in the database. The latter waits instead for server response, which can be "email not found", "wrong password" or "access granted". Enrich server capabilities using an arbitrary number of threads which represent the maximum number contemporary login attempts to the server. Simulate that using multiple executions of the same client executable file. Remember that in the server is present only one cryptocore.
 
 ## License
