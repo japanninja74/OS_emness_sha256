@@ -1,3 +1,35 @@
+/**
+ * File              : compare.c
+ *                     
+ * Authors           : Fabio Scatozza      <s315216@studenti.polito.it>
+ *                     Isacco Delpero      <s314713@studenti.polito.it>
+ *                     Leonardo Cerruti    <s317664@studenti.polito.it>
+ *                     Claudio Capobianchi <s319187@studenti.polito.it>
+ *                     Saman Alipour       <s307980@studenti.polito.it>
+ *                     Abdul Rehman        <s315198@studenti.polito.it>
+ *                     Stephano Perera     <s313080@studenti.polito.it>
+ *
+ * Date              : 16.07.2023
+ * Last Modified Date: 18.07.2023
+ *
+ * Copyright (c) 2023
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+
 /*
  * This C program reads a text file and saves its content into a memory buffer ('msg'). Then the hash of the file is computed in two different ways: 
  * accessing the external cryptocore and using 'sha256sum' Unix command. the two results are compared, in order to know if the external device works properly.
