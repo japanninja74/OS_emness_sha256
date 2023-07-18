@@ -21,8 +21,6 @@ security.
 
     * [PetaLinux Flow](#petalinux-flow)
 
-* [The algorithm](#the-algorithm)
-
 * [Exercises](#exercises)
 
     * [Exercise 1](#exercise-1)
@@ -35,7 +33,7 @@ security.
 
 ## What is this?
 The aim of this lab experience is to work on an environment made of a processor and an external
-hardware accelerator that implements the SHA 256 algorithm in a fast and efficient way. The crypto core is
+hardware accelerator that implements the SHA 256 algorithm in an efficient way. The crypto core is
 described in VHDL, so that it can be implemented on a FPGA. Some memory-mapped registers have been
 designed: to make the system work, it is sufficient to connect these registers to processor bus and
 to assign them proper addresses.
@@ -45,8 +43,8 @@ so that the external device can be accessed by using the device driver we develo
 install Linux on a processing system can be easily found online. For example, if working on a Xilinx
 board, Linux OS can be installed through Petalinux tool. The exercises require the knowledge of the
 main system programming methods on Linux (system calls, files management, shared memory, message
-passing, threads, semaphores): to learn more about these topics you can find some useful online material,
-for example [here](https://www.os-book.com/OS10/). 
+passing, threads, semaphores): to learn more about these topics you can find some useful material
+in the provided sources. 
 
 ## Getting Started
 The project targets the [TUL PYNQ-Z2](https://www.tulembedded.com/fpga/ProductsPYNQ-Z2.html) board,
@@ -160,7 +158,7 @@ a custom hardware platform are summarized in the table below.
    *→ Image Packaging Configuration*:
      * change *root filesystem type* to EXT4
 
-3. Configure the kernel by launching
+3. Customize the kernel by launching:
        
        petalinux-config -c kernel
 
@@ -172,6 +170,93 @@ a custom hardware platform are summarized in the table below.
 
    *→ Device Drivers → Userspace I/O drivers*:
      * change *Userspace platform driver with generic irq and dynamic memory* to YES
+
+4. Customize the root file system by launching:
+
+       petalinux-config -c rootfs
+
+   *→ Filesystem Packages → misc → packagegroup-core-buildessential*: to include basic development
+   tools, such as `gcc`:
+     * change *packagegroup-core-buildessential* to YES
+     * change *packagegroup-core-buildessential-dev* to YES
+
+   *→ Filesystem Packages → console → network → openssh*: to provide network access to the board:
+     * change *openssh* to YES
+     * change *openssh-sshd* to YES
+     * change *openssh-sftp-server* to YES
+     * change *openssh-scp* to YES
+
+   *→ Image Features*: 
+     * change *package-management* to YES
+     * change *debug-tweaks* to YES
+
+5. Create and add the custom kernel module by launching:
+
+       petalinux-create -t modules --name sha256 --enable
+
+   Starting from project root, change to the newly created module directory:
+
+       cd project-spec/meta-user/recipes-modules/sha256
+
+6. Build the system by launching:
+
+       petalinux-build
+
+7. Customize the device tree. In your favorite text editor, starting from project root, open:
+      
+       components/plnx_workspace/device-tree/device-tree/pl.dtsi 
+
+   If the `interrupts` attribute line is:
+     
+       interrupts = <0 29 4>;
+
+   a further step is needed to change the sensitivity to *rising edge*, encoded in the last of the
+   three numbers. Change the line to:
+      
+       interrupts = <0 29 1>; 
+   
+   Then rebuild the device tree and the entire system:
+
+        petalinux-build -c device-tree
+        petalinux-build
+
+   If you want to make sure that the changes was applied, starting from the proect root change to:
+     
+        images/linux
+
+   Then extract the device tree:
+  
+        dumpimage -T flat_dt -p 1 -o device_tree_out.dtb image.ub
+
+   and de-compile it in a human-readable format:
+ 
+        dtc -I dtb -O dts -o device_tree_out.dts device_tree_out.dtb
+   
+   Finally, you can open `device_tree_out.dts` and locate the `amba_pl` device node.
+
+8. To cross-compile the kernel module, starting from the proect root, change to:
+       
+        project-spec/meta-user/recipes-modules/sha256
+
+   First, copy the provided module sources:
+    
+        cp ../../../../../../src/lkm/sha256* ./files
+
+   Then, edit the bitbake recipe `./sha256.bb` by changing:
+       
+        SRC_URI = "file://Makefile \
+                   file://sha256.c \
+                   file://COPYING \
+                  "
+   into:
+       
+        SRC_URI = "file://Makefile \
+                   file://sha256.c \
+                   file://sha256.h \
+                   file://COPYING \
+                  "
+9. 
+
 
 ## The algorithm
 Before presenting the exercises, let's make an overview of the algorithm implemented in the crypto core,
@@ -199,8 +284,8 @@ of a message or file, to verify the correctness of a password or to reliably ide
 makes the use of SHA algorithms so widespread is that it is almost impossible to get the initial message starting
 from the digest (the only way is to try out a lot of input messages until the desired hash is found).
 
-To learn more about how the algorithm is implemented it is suggested to have a look [here](https://csrc.nist.gov/projects/hash-functions) or [here](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
-
+To learn more about how the algorithm is implemented it is suggested to have a look
+[here](https://csrc.nist.gov/projects/hash-functions) or [here](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 
 ## License
 
