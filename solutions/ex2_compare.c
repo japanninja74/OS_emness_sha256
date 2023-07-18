@@ -46,6 +46,10 @@
 #include <fcntl.h>
 #include <string.h>
 
+#define SHA256_IOC_MAGIC  'S'
+#define SHA256_IOC_WCAT   _IOW(SHA256_IOC_MAGIC, 1, int)
+
+
 int main (int argc, char* argv[]){
 
 // Check the input parameter
@@ -160,6 +164,12 @@ if (pid < 0){
       perror("device open error");
       exit(-1);
    }
+
+   // Disable concatenation
+   if(ioctl(fd_dev, SHA256_IOC_WCAT, 0) == -1) {
+    perror("ioctl error");
+    exit(-1);
+  }
    
    // Write the whole message to the device
    if (write(fd_dev, msg, strlen(msg)) == -1){
