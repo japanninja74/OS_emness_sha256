@@ -460,6 +460,10 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 
 ### The Programmer's Model
 
+If programming in a bare metal environment, the accelerator must be used through the following
+memory-mapped registers: CSR is the control & status register, WXX are used to store the 512-bit
+block, while HX registers store the computed digest.
+
 | Register Name | Bit Field and Description          |
 |---------------|------------------------------------|
 | CSR           | <table><thead><tr><th>31</th><th>30</th><th>29</th><th>10</th><th>9</th><th>8</th><th>7:4</th><th>3:2</th><th>1</th><th>0</th></tr></thead><tbody><tr><td>ERR</td><td>DONE</td><td>BLOCKREAD</td><td>IENABLE</td><td>WR</td><td>LAST</td><td>LASTWORD</td><td>VALIDBYTE</td><td>NEWHASH</td><td>COREENABLE</td></tr></tbody></table>ERR: read-only bit raised by the crypto core if some error occurs.<br/>DONE: read-only bit raised by the crypto core when the hash computation of the entire message has terminated.<br/>BLOCKREAD: read-only bit raised by the crypto core when an entire block has been read (it is not raised if the block is the last one); it is automatically cleared when writing '1' on WR.<br/>IENABLE: this bit must be set by the programmer if he wants to use interrupts.<br/>WR: this bit must be set to '1' to tell the core that a new block is available in the registers; it is automatically cleared after all the words have been read by the core.<br/>LAST: this bit must be set by the programmer before writing '1' on WR to indicate that the block the core is going to read is the last one; it is automatically cleared when writing '1' on NEWHASH.<br/>LASTWORD: 4 bits to indicate $N_{words}-1$, where $N_{words}$ is the number of valid words inside the block.<br/>VALIDBYTE: 2 bits to indicate how many bytes are part of the message in last word ("00" if all bytes are valid).<br/>NEWHASH: this bit must be set before starting the computation of a new hash to reset the crypto core; it is automatically cleared after one clock cycle.<br/>COREENABLE: this bit must be set to enable the crypto core.
