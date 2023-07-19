@@ -10,7 +10,7 @@
  *                     Stephano Perera     <s313080@studenti.polito.it>
  *
  * Date              : 10.07.2023
- * Last Modified Date: 11.07.2023
+ * Last Modified Date: 19.07.2023
  *
  * Copyright (c) 2023
  *
@@ -259,6 +259,13 @@ int main() {
   readFancy(fd, hash_abc_10zero_abc_10zero);
   
   printf("\n################################\n");
+  
+  printf("Disabling concatenations...\n");
+  if(ioctl(fd, SHA256_IOC_WCAT, 0) < 0) {
+    perror("ioctl()");
+    close(fd);
+    exit(EXIT_FAILURE);
+  }
 
   close(fd);
   exit(EXIT_SUCCESS);
