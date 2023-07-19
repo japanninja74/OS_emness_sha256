@@ -71,7 +71,7 @@
 
 static const char str[] = "abc";
 
-//Precomuted hash value of "abc"
+//Precomputed hash value of "abc"
 static const unsigned hash_str[] = {
   0xba7816bf,
   0x8f01cfea,
@@ -82,7 +82,7 @@ static const unsigned hash_str[] = {
   0xb410ff61,
   0xf20015ad };
   
-//Precomuted hash value of 1000000 zeros
+//Precomputed hash value of 1000000 zeros
 static const unsigned hash_1000000zero[] = {
   0xd29751f2,
   0x649b32ff,
@@ -92,7 +92,7 @@ static const unsigned hash_1000000zero[] = {
   0xff0beedf,
   0xb0b692b9,
   0x24cc8025};
-//Precomuted hash value of 10 zeros + abc
+//Precomputed hash value of 10 zeros + abc
 static const unsigned hash_10zero_abc[] = {
   0x613f318b,
   0xec31b432,
@@ -102,7 +102,7 @@ static const unsigned hash_10zero_abc[] = {
   0x0a3daf0d,
   0xf9637f54,
   0xe5ab6f01};
-//Precomuted hash value of "bc"
+//Precomputed hash value of "bc"
 static const unsigned hash_abc_10zero_abc_10zero[] = {
   0xbaafff5f,
   0xd15d4354,
@@ -224,7 +224,7 @@ void concatenation() {
     		printf("write(): written %ld byte(s)\n", count);
 
   	printf("Enabling concatenations...\n");
-  	if(ioctl(fd, SHA256_IOC_WCAT, 1) < 0) { // Enabling Concatination  by sending one to ioctl
+  	if(ioctl(fd, SHA256_IOC_WCAT, 1) < 0) { // Enabling Concatenation  by sending one to ioctl
     		perror("ioctl()");
     		close(fd);
     		exit(EXIT_FAILURE);
@@ -305,7 +305,7 @@ void concatenation() {
   
   	printf("\n################################\n");
   	
-  	if(ioctl(fd, SHA256_IOC_WCAT, 0) < 0) { // Disabling Concatination  by sending zero to ioctl
+  	if(ioctl(fd, SHA256_IOC_WCAT, 0) < 0) { // Disabling Concatenation  by sending zero to ioctl
     		perror("ioctl()");
     		close(fd);
     		exit(EXIT_FAILURE);
