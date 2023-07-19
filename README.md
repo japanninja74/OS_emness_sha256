@@ -461,8 +461,8 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 ### The Programmer's Model
 
 If programming in a bare metal environment, the accelerator must be used through the following
-memory-mapped registers: CSR is the control & status register, WXX are used to store the 512-bit
-block, while HX registers store the computed digest.
+memory-mapped registers: CSR is the control & status register, WXX registers are used to store
+the 512-bit block, while HX registers store the computed digest.
 
 | Register Name | Bit Field and Description          |
 |---------------|------------------------------------|
