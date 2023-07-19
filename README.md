@@ -523,7 +523,7 @@ the test functions. Each thread independently tests a specific aspect of the SHA
 leading to a faster overall self-test. The mutex ensures that each test function executes
 atomically without interference, preventing race conditions and guaranteeing the reliability
 of the test results.
-#### Exercise 2 - malloc()/realloc(), fork(), execl(), system()
+#### Exercise 2 - Checking the correctness of the digest from the crypto core
 
 Write a C program that computes the hash of a file in two different ways: by using the accelerator
 and by using Linux command "sha256sum". The file is of unknown size, so dynamic memory allocation must be used
