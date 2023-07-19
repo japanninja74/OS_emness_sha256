@@ -80,7 +80,7 @@ void * hash_thread (void * arg){
 	//Now the critical section starts
 	sem_wait(&sem);
 
-	if(ioctl(fd_dev, SHA256_IOC_WCAT, 0) == -1) {
+	if(ioctl(fd, SHA256_IOC_WCAT, 0) == -1) {
 		perror("ioctl error");
 		exit(-1);
 	}
