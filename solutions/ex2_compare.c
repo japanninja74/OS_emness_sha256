@@ -45,6 +45,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/ioctl.h>
 
 #define SHA256_IOC_MAGIC  'S'
 #define SHA256_IOC_WCAT   _IOW(SHA256_IOC_MAGIC, 1, int)
