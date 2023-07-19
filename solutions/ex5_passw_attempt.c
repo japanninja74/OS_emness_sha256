@@ -90,6 +90,12 @@ void *passwcheck(void *exchange_data){
 	
 	//Waiting to take control of the driver
 	sem_wait(&hash_sem);
+
+	//Resetting the device concatenation
+	if(ioctl(fd, SHA256_IOC_WCAT, 0) == -1) {
+		perror("ioctl error");
+		exit(-1);
+	}
 	
 	printf("Thread %lu took control and it is trying with password %s\n", pthread_self(), password);
 	//Writing the password to the core
