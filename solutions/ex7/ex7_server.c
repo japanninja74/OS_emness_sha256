@@ -194,11 +194,11 @@ int main () {
     //example of server database with user and hashed passwords
     user database[DB_SIZE];    
     strcpy(database[0].email,"user1@polito.it");
-    strcpy(database[0].password,"e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349");
+    strcpy(database[0].password,"e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349");	//passowrd=pass1
     strcpy(database[1].email,"user2@polito.it");
-    strcpy(database[1].password,"1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9");
+    strcpy(database[1].password,"1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9");	//passowrd=pass2
     strcpy(database[2].email,"user3@polito.it");
-    strcpy(database[2].password,"3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167");
+    strcpy(database[2].password,"3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167");	//password=pass3
     
     //creation of arbitrary number of threads with access to the database
     pthread_t tid[NUM_THREADS];
