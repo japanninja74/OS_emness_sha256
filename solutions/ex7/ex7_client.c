@@ -34,6 +34,10 @@
 * SOFTWARE.
 */
 
+/**
+* Execute this program in another window after launching the server, and use one of the possible id thread (shown in output from server) as argument
+*/
+
 #include <stdio.h>                  //              input/output
 #include <string.h>                 //              string manipulation
 #include <stdlib.h>                 //              exit function   
