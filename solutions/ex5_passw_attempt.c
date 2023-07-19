@@ -153,8 +153,9 @@ void *passwcheck(void *exchange_data){
         exchg_data->valid=1;
 		
 	}
-	free(password);
-
+	if (password!=NULL)
+		free(password);
+	
     pthread_exit(NULL);
 }
 
@@ -280,9 +281,14 @@ int main(int argc , char* argv[]) {
 		//Entering here if a return value different than 0 wasn't found
 		printf("All password guesses were wrong\n");
 	}
+	else {
+		//Result is used only if a password was found
+       		if(exchange_data.result!=NULL)
+        		free(exchange_data.result);
+    	}
 	
-	free(exchange_data.line);
-   	free(exchange_data.result);
+	if(exchange_data.line!=NULL)
+        	free(exchange_data.line);
 
         sem_destroy(&hash_sem);
         sem_destroy(&read_sem);
