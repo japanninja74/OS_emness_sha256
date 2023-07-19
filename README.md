@@ -61,13 +61,13 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
   - [Baremetal Platform Test](#baremetal-platform-test)
   - [PetaLinux Flow](#petalinux-flow)
 - [Deploy from Release](#deploy-from-release)
-- [Usage](#usage)
+- [Usage (TUL PYNQ-Z2 board)](#usage-tul-pynq-z2-board)
 - [The Lab Experience](#the-lab-experience)
   - [The algorithm](#the-algorithm)
   - [The Programmer's Model](#the-programmers-model)
   - [Exercises](#exercises)
     - [Exercise 1 - Testing all the driver functionalities](#exercise-1---testing-all-the-driver-functionalities)
-    - [Exercise 2 - malloc()/realloc(), fork(), execl(), system()](#exercise-2---mallocrealloc-fork-execl-system)
+    - [Exercise 2 - Checking the correctness of the digest from the crypto core](#exercise-2---checking-the-correctness-of-the-digest-from-the-crypto-core)
     - [Exercise 3 - TCP server](#exercise-3---tcp-server)
     - [Exercise 4 - File comparison using multithreading and semaphores](#exercise-4---file-comparison-using-multithreading-and-semaphores)
     - [Exercise 5 - Password finder from a hash](#exercise-5---password-finder-from-a-hash)
@@ -392,31 +392,34 @@ After having downloaded the release, unpack it and then:
     
       sudo tar xvfp rootfs.tar.gz -C /media/rootfs
 
-## Usage
+## Usage (TUL PYNQ-Z2 board)
 Access to the board is made possible through serial port or SSH. The former through a usb port
 (USB protocol is converted to serial one thanks to FTDI FT2232HQ chip), the latter an ethernet
 one and allows multiple remote connections; during our tests we used a point-to-point connection.
-PuTTY is enough for both ways.
+Pick a tool depending on your needs; `picocom` and `PuTTY` are quite popular choices.
 
 Serial terminal settings:
-* Port: depends on remote system, command "ls/dev" shows available devices, the board is usually /dev/ttyUSBx.
+* Port: depends on remote system, command `ls /dev` shows the available devices, the board is 
+  usually `/dev/ttyUSBx`
 * Baud rate:      115200
 * Data bits:      8
 * Stop bits:      1
 * Partity check:  none
 * Flow control:   none
 
-Once the serial connection is established, a command prompt appears: it is requested to insert user and password,
-both equal to "root".
+Once the serial connection is established, a command prompt appears: if you set up the system 
+using the published release, enter both user and password as `root`. You will find both the
+self test program and the compiled kernel module in the root folder.
 
+To load the kernel module from the root folder:
+* `insmod sha256.ko` loads the module automatically selecting interrupt synchronization.
+* `insmod sha256.ko irq_enable=n` loads the module selecting polling synchronization.
 
 SSH settings:
 * IP:             10.42.0.128
 * Port:           22
 * User:           root
 * Password:       root
-
-Once logged in, there is complete control of the OS since access is from root.
 
 ## The Lab Experience
 Now it's your turn! Read the next sections then dive into the exercises. Strive to devise
