@@ -38,7 +38,9 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 
 * [x] PetaLinux project
 
-    * [X] polling synchronization
+    * [ ] polling synchronization
+
+      *TODO* improve polling in an efficient way (without sleeping for 1 ms)
 
     * [x] interrupt synchronization
 
