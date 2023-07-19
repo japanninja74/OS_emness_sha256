@@ -430,7 +430,12 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 |---------------|------------------------------------|
 | CSR           | <table><thead><tr><th>31</th><th>30</th><th>29</th><th>10</th><th>9</th><th>8</th><th>7:4</th><th>3:2</th><th>1</th><th>0</th></tr></thead><tbody><tr><td>ERR</td><td>DONE</td><td>BLOCKREAD</td><td>IENABLE</td><td>WR</td><td>LAST</td><td>LASTWORD</td><td>VALIDBYTE</td><td>NEWHASH</td><td>COREENABLE</td></tr></tbody></table>ERR:<br/>DONE:<br/>BLOCKREAD:<br/>IENABLE:<br/>WR:<br/>LAST:<br/>LASTWORD:<br/>VALIDBYTE:<br/>NEWHASH:<br/>COREENABLE:
 | WXX           | W0: most significant word of the 512-bit block <br/>W15: least significant word of the 512 bit block. 
-| HX            | H7: most significant word of the 256-bit hash <br/>H0: least significant word of the 256-bit hash                                    
+| HX            | H7: most significant word of the 256-bit hash <br/>H0: least significant word of the 256-bit hash
+
+<p align="center">
+<img src="doc/platform_diagram.png" width="900">
+</p>
+
 ### Exercises
 
 #### Exercise 1 - Testing all the driver functionalities
