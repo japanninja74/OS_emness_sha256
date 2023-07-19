@@ -128,7 +128,7 @@ void *th_routine (void *database){
         //assign the unique crypto core to the first thread who got "green light"
         pthread_mutex_lock(&mutex);                                     
         
-        //writing password from client to the cryptocore to be hashed
+        //writing password from client to the crypto core to be hashed
                                                                         
         if ((count = write(fd, receivedPtr->password, strlen(receivedPtr->password))) < 0)
             perror("write()");
