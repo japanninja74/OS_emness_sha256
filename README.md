@@ -314,7 +314,7 @@ a custom hardware platform are summarized in the table below.
 
    To cross-compile the kernel module, first copy the provided module sources:
     
-        cp ../../../../../../src/lkm/sha256* ./files
+        cp ../../../../../src/lkm/sha256* ./files
 
    Then, edit the bitbake recipe `./sha256.bb` by changing:
        
