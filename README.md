@@ -399,22 +399,32 @@ one and allows multiple remote connections; during our tests we used a point-to-
 PuTTY is enough for both ways.
 
 Serial terminal settings:
+
 Port: depends on remote system, command "ls/dev" shows available devices, the board is usually /dev/ttyUSBx.
+
 Baud rate:      115200
+
 Data bits:      8
+
 Stop bits:      1
+
 Partity check:  none
+
 Flow control:   none
 
 Once the serial connection is established, a command prompt appears: it is requested to insert user and password,
 both equal to "root".
 
-SSH settings:
-IP:             10.42.0.128
-Port:           22
-User:           root
-Password:       root
 
+SSH settings:
+
+IP:             10.42.0.128
+
+Port:           22
+
+User:           root
+
+Password:       root
 
 Once logged in, there is complete control of the OS since access is from root.
 
