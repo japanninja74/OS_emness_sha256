@@ -36,11 +36,11 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
     
     * [X] interrupt synchronization
 
-* [ ] PetaLinux project
+* [x] PetaLinux project
 
     * [X] polling synchronization
 
-    * [ ] interrupt synchronization
+    * [x] interrupt synchronization
 
       *TODO* `platform_get_resource(pdev, IORESOURCE_IRQ, 0)` returns `NULL` while probing the
       device tree node
@@ -245,8 +245,16 @@ a custom hardware platform are summarized in the table below.
      * change *CPU Frequency scaling* to NO
      * change *CPU Idle* to NO
 
-   *→ Device Drivers → Userspace I/O drivers*:
-     * change *Userspace platform driver with generic irq and dynamic memory* to YES
+   *→ Device Drivers*:
+     * change *On-Chip Interconnect management support* to YES
+
+     * *→ Reset Controller Support*:
+       * change *Simple Reset Controller Driver* to YES
+
+     * *→ Userspace I/O drivers*:
+       * change *Userspace I/O platform driver with generic IRQ handling* to YES
+       * change *Userspace platform driver with generic irq and dynamic memory* to YES
+       * change *Xilinx AI Engine driver* to YES
 
 4. Customize the root file system by launching:
 
@@ -280,7 +288,12 @@ a custom hardware platform are summarized in the table below.
        interrupts = <0 29 4>;
 
    a further step is needed to change the sensitivity to *rising edge*, encoded in the last of the
-   three numbers. Change the line to:
+   three numbers. Starting from PetaLinux project root, open:
+
+       /project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+   
+   then, paste the `amba_pl` node description from `components/plnx_workspace/device-tree/device-tree/pl.dtsi`
+   and change the `interrupts` attribute line to:
       
        interrupts = <0 29 1>; 
    
@@ -378,9 +391,9 @@ employing `fdisk`.
 After having downloaded the release, unpack it and then:
 * copy `BOOT.BIN`, `image.ub`, and `boot.scr` to the bootable partition
 * extract `rootfs.tar.gz` to the root file system partition; assuming the partition is mounted
-in `/media/rootfs`, the command would be:
+  in `/media/rootfs`, the command would be:
     
-    sudo tar xvfp rootfs.tar.gz -C /media/rootfs
+      sudo tar xvfp rootfs.tar.gz -C /media/rootfs
 
 ## Usage
 
