@@ -51,6 +51,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/ioctl.h>
 
 #include <sys/types.h> 
 #include <sys/stat.h> 
@@ -72,6 +73,11 @@ int main() {
         perror("open()");
         exit(EXIT_FAILURE);
     }
+    //Resetting the device's concatenation
+    if(ioctl(fd, SHA256_IOC_WCAT, 0) == -1) {
+		      perror("ioctl error");
+		      exit(-1);
+	   }
 
     // Loop to read 100 messages from the user, calculate the hash, and write it to the  pipe
     for (i = 0; i < 100; i++) {
