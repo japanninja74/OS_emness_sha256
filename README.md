@@ -470,6 +470,25 @@ the 512-bit block, while HX registers store the computed digest.
 | WXX           | W0: most significant word of the 512-bit block <br/>W15: least significant word of the 512 bit block. 
 | HX            | H7: most significant word of the 256-bit hash <br/>H0: least significant word of the 256-bit hash
 
+If programming in a Linux environment, there is no need of knowing the registers:
+the driver provides all the functionalities to compute the hash of a message or
+a concatenation of more messages. Like all device drivers in Linux, it is sufficient
+to use some system calls:
+* open(): it enables the core.
+* close(): it disables the core.
+* ioctl(): to choose between concatenated (writing 1) or non-concatenated mode.
+ (writing 0). Please notice that it is important to always specify the desired behaviour,
+ there is no guarantee that at the beginning non-concatenated mode is active.
+* lseek(): allows to reset the core (if final position == 0) or to add some bytes filled
+ with 0s (if final position > current position).
+* write(): to send the message from which the hash must be computed. Writing a number
+ of bytes equal to 0 allows some special functionalities (summarized in the graph).
+* read(): to read the computed hash; if this system call is invoked while the core is still
+ computing the hash, it waits until the result is available (unless O_NONBLOCK was set while
+ opening the file).
+
+The following graph summarize how to use the system calls to send the message to the core, in both
+concatenated and non-concatenated mode.
 <p align="center">
 <img src="doc/Instruction_scheme.png" width="900">
 </p>
