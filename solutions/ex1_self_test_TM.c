@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
 	/* 
    	* testing open 
    	*/
-  	if((fd = open("dev/sha256", O_RDWR)) < 0) {
+  	if((fd = open("/dev/sha256", O_RDWR)) < 0) {
     		perror("open()");
     		exit(EXIT_FAILURE);
  	 }
