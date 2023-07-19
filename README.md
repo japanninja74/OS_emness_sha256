@@ -20,6 +20,7 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 [Stephano Perera](mailto:s313080@studenti.polito.it>)
 
 ## Project Advancement
+
 * [X] Collect and organize material
 
 * [ ] Platform design
@@ -38,15 +39,18 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 
 * [x] PetaLinux project
 
-    * [ ] polling synchronization
+    * [X] polling synchronization
+      
+        *Note:* while polling the process is uninterruptible. Programmer's errors could result in
+        an unresponsive system.
 
-      *TODO* improve polling in an efficient way (without sleeping for 1 ms)
+        *Possible Fix*: implement the polling delay with `msleep_interruptible()` at the
+        expense of performance.
 
     * [x] interrupt synchronization
 
 * [X] Lab experience 
   
- 
 
 ## Contents
 
@@ -414,8 +418,8 @@ using the published release, enter both user and password as `root`. You will fi
 self test program and the compiled kernel module in the root folder.
 
 To load the kernel module from the root folder:
-* `insmod sha256.ko` loads the module automatically selecting interrupt synchronization.
-* `insmod sha256.ko irq_enable=n` loads the module selecting polling synchronization.
+* `insmod sha256.ko` loads the module automatically selecting polling synchronization.
+* `insmod sha256.ko irq_enable=y` loads the module selecting interrupt synchronization.
 
 SSH settings:
 * IP:             Board IP address
