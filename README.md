@@ -42,9 +42,6 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
 
     * [x] interrupt synchronization
 
-      *TODO* `platform_get_resource(pdev, IORESOURCE_IRQ, 0)` returns `NULL` while probing the
-      device tree node
-
 * [X] Lab experience 
   
  
