@@ -1,0 +1,10 @@
+attack.diff contains the differences with respect to the original source
+sha256.c. To apply the patch:
+
+1. copy the original source in this directory:
+      
+       cp ../../src/lkm/sha256.c .
+
+2. patch it:
+
+       patch -u sha256.c < attack.diff

