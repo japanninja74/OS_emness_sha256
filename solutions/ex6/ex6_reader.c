@@ -115,7 +115,6 @@ int main() {
             if (!result) {
                 printf("Hash mismatch!.\n");
             }
-            puts(""); // Print a newline after each hash set
         }
 
         if (result) {
