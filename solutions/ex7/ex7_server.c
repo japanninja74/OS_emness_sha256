@@ -34,6 +34,15 @@
 * SOFTWARE.
 */
 
+/**
+ * 
+ * The application I developed reproduces the scenario of logging from a client to a server.
+ * The latter has a database of users containing per each of them its email, hashed password and a message from last login attempt. After having checked whether the email is present in the database, the password is hashed by the crypto core and the result is compared with all hashes resulting in a successfull access or not.
+ * Interprocess communication is implemented in System V through a shared memory region, necessary for email and password, and a couple of semaphores: the first one pauses the server until email and password are transferred, and the second one pauses the client, waiting for a response from the server.
+ * I have enriched server capabilities by including in it an arbitrary number of threads representing connection client-server: after setting up IPC each of them prints its thread ID which is used, just like a real server port, as a command line argument by the client to connect to that specific thread. This allows to have as connections as threads, using only one client executable. For the hash computation, the unique crypto core is assigned to a single thread thanks to mutex, locking the device for the time strictly necessary for computing the hash.
+ * 
+ */
+
 #define _GNU_SOURCE             //required for  gettid of thread
 #include <stdio.h>              //              input/output
 #include <string.h>             //              string manipulation
@@ -46,13 +55,13 @@
 #include <pthread.h>            //              threads
 #include "ex7_sem_shm_string.h" //              header for semaphore calls and common #define between server and client
 
-////// for driver
+				//		driver
 #include <stdbool.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #define SHA256_IOC_MAGIC  'S'
 #define SHA256_IOC_WCAT   _IOW(SHA256_IOC_MAGIC, 1, int)
-//////////
+
 #define DB_SIZE 3
 
 #define NUM_THREADS 4
