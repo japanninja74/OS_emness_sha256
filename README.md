@@ -267,19 +267,11 @@ a custom hardware platform are summarized in the table below.
      * change *package-management* to YES
      * change *debug-tweaks* to YES
 
-5. Create and add the custom kernel module by launching:
-
-       petalinux-create -t modules --name sha256 --enable
-
-   Starting from PetaLinux project root, change to the newly created module directory:
-
-       cd project-spec/meta-user/recipes-modules/sha256
-
-6. Build the system by launching:
+5. Build the system by launching:
 
        petalinux-build
 
-7. Customize the device tree. In your favorite text editor, starting from PetaLinux project root, open:
+6. Customize the device tree. In your favorite text editor, starting from PetaLinux project root, open:
       
        components/plnx_workspace/device-tree/device-tree/pl.dtsi 
 
@@ -311,11 +303,16 @@ a custom hardware platform are summarized in the table below.
    
    Finally, you can open `device_tree_out.dts` and locate the `amba_pl` device node.
 
-8. To cross-compile the kernel module, starting from the project root, change to:
-       
-        project-spec/meta-user/recipes-modules/sha256
+7. Create the custom kernel module by launching:
 
-   First, copy the provided module sources:
+       petalinux-create -t modules --name sha256
+
+   Starting from PetaLinux project root, change to the newly created module directory:
+
+       cd project-spec/meta-user/recipes-modules/sha256
+
+
+   To cross-compile the kernel module, first copy the provided module sources:
     
         cp ../../../../../../src/lkm/sha256* ./files
 
@@ -335,7 +332,7 @@ a custom hardware platform are summarized in the table below.
 
    Finally, launch:
 
-        petalinux-build
+        petalinux-build -c sha256
 
    The compiled module is located somewhere within the PetaLinux folder; from the PetaLinux project root
 
