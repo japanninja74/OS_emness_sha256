@@ -56,6 +56,9 @@
 #include <sys/types.h> 
 #include <sys/stat.h> 
 
+#define SHA256_IOC_MAGIC  'S'
+#define SHA256_IOC_WCAT   _IOW(SHA256_IOC_MAGIC, 1, int)
+
 unsigned* read_hash(int fd);
 void printHash(const unsigned hash[8]);
 
@@ -77,7 +80,7 @@ int main() {
     if(ioctl(fd, SHA256_IOC_WCAT, 0) == -1) {
 		      perror("ioctl error");
 		      exit(-1);
-	   }
+    }
 
     // Loop to read 100 messages from the user, calculate the hash, and write it to the  pipe
     for (i = 0; i < 100; i++) {
