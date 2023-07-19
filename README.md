@@ -433,7 +433,7 @@ to the [algorithm standard](http://dx.doi.org/10.6028/NIST.FIPS.180-4).
 | HX            | H7: most significant word of the 256-bit hash <br/>H0: least significant word of the 256-bit hash
 
 <p align="center">
-<img src="doc/platform_diagram.png" width="900">
+<img src="doc/Instruction_scheme.png" width="900">
 </p>
 
 ### Exercises
