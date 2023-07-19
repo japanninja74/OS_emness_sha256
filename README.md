@@ -595,7 +595,7 @@ Objective: try to get the driver not working
 
 Approach 1: Can you think of any pitfall related to `SHA256_IOC_WCAT` command?
 
-Approach 2. Try to develop a non working version of the driver starting from the original version. The hacked version of the hash driver should not generate any error such that the user doesn't get warned but just get wrong hash results.
+Approach 2: Try to develop a non working version of the driver starting from the original version. The hacked version of the hash driver should not generate any error such that the user doesn't get warned but just get wrong hash results.
 
 Hint: Try to modify the read or write function of the driver in order to make wrong data.
 
