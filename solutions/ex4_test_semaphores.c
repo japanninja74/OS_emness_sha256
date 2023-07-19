@@ -108,8 +108,6 @@ void * hash_thread (void * arg){
 		//Actually writing to the driver
 		if ((count = write(fd, str, strlen(str)) < 0))
 			perror("write()");
-		else if (count != strlen(str))
-			fprintf(stderr, "write(): failed writing %d bytes\n", strlen(str));
 	}
 
 	//This action of terminating the concatenation is needed to send the "last" signal
