@@ -393,8 +393,30 @@ After having downloaded the release, unpack it and then:
       sudo tar xvfp rootfs.tar.gz -C /media/rootfs
 
 ## Usage
+Access to the board is made possible through serial port or SSH. The former through a usb port
+(USB protocol is converted to serial one thanks to FTDI FT2232HQ chip), the latter an ethernet
+one and allows multiple remote connections; during our tests we used a point-to-point connection.
+PuTTY is enough for both ways.
 
-TODO: how to connect to the board.
+Serial terminal settings:
+Port: depends on remote system, command "ls/dev" shows available devices, the board is usually /dev/ttyUSBx.
+Baud rate:      115200
+Data bits:      8
+Stop bits:      1
+Partity check:  none
+Flow control:   none
+
+Once the serial connection is established, a command prompt appears: it is requested to insert user and password,
+both equal to "root".
+
+SSH settings:
+IP:             10.42.0.128
+Port:           22
+User:           root
+Password:       root
+
+
+Once logged in, there is complete control of the OS since access is from root.
 
 ## The Lab Experience
 Now it's your turn! Read the next sections then dive into the exercises. Strive to devise
