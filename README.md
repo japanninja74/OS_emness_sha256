@@ -416,7 +416,7 @@ To load the kernel module from the root folder:
 * `insmod sha256.ko irq_enable=n` loads the module selecting polling synchronization.
 
 SSH settings:
-* IP:             10.42.0.128
+* IP:             Board IP address
 * Port:           22
 * User:           root
 * Password:       root
