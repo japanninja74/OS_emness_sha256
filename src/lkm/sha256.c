@@ -10,7 +10,7 @@
  *                     Stephano Perera     <s313080@studenti.polito.it>
  *
  * Date              : 07.07.2023
- * Last Modified Date: 17.07.2023
+ * Last Modified Date: 19.07.2023
  *
  * Copyright (c) 2023
  *
@@ -47,11 +47,10 @@
 #include <linux/of_platform.h>
 
 #include "sha256.h"
-
 /*
  * global declarations
  */
-static bool irq_enable = true;        /* load time: choose irq or polling synchronization */
+static bool irq_enable = false;        /* load time: choose irq or polling synchronization */
 
 /* device variables */
 static struct class *dev_class;
@@ -59,11 +58,15 @@ static dev_t dev_number;
 static struct sha256_dev sha256_dev;
 
 /* bind the driver to the device */
+#ifdef CONFIG_OF
 static struct of_device_id sha256_of_match[] = {
   { .compatible  = "xlnx,gv-sha256-1.0", },
   { /* end of list */ },
 };
 MODULE_DEVICE_TABLE(of, sha256_of_match);
+#else
+# define sha256_of_match
+#endif
 
 /* driver representation */
 static int sha256Probe(struct platform_device *pdev);  /* device found while probing: driver startup */
@@ -95,7 +98,7 @@ static struct file_operations sha256_fops = {
  * parameter handling
  */
 module_param(irq_enable, bool, S_IRUGO);
-MODULE_PARM_DESC(irq_enable, "Enable interrupt handling (default: true)");
+MODULE_PARM_DESC(irq_enable, "Enable interrupt handling (default: false)");
 
 /*
  * file operations
@@ -569,39 +572,61 @@ static irqreturn_t sha256IRQHandler(int irq, void *dev_id) {
  * module dynamic management
  */
 static int sha256Probe(struct platform_device *pdev) {
-  struct resource *r_irq; /* Interrupt resources */
   struct resource *r_mem; /* IO mem resources */
   struct device *dev = &pdev->dev;
   
   int rc = 0;
 
-  dev_info(dev, DEVICE_NAME ": device tree probing\n");
+  dev_info(dev, "device tree probing\n");
 
-  /* initialize device representation: iospace */
+  /* dynamically allocate device number */
+  if ((rc = alloc_chrdev_region(&dev_number, 0, 1, DEVICE_NAME)) < 0) {
+    dev_err(dev, "failed device number allocation\n");
+    return rc;
+  }
+  dev_info(dev, "device number allocated: major = %d, minor = %d\n", MAJOR(dev_number), MINOR(dev_number));
+
+  /* register device class */
+  dev_class = class_create(THIS_MODULE, CLASS_NAME);
+  if (IS_ERR(dev_class)) {
+    dev_err(dev, "failed class creation\n");
+    rc = PTR_ERR(dev_class);
+    goto revert_chrdev;
+  }
+  dev_info(dev, "device class registered\n");
+
+  /* initialize device representation */
+
+  cdev_init(&sha256_dev.cdev, &sha256_fops);
+  sha256_dev.cdev.owner = THIS_MODULE; 
+
+  /* memory mapped segment */
   r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
   if (!r_mem) {
-    dev_err(dev, DEVICE_NAME ": invalid address\n");
-    return -ENODEV;
+    dev_err(dev, "invalid address\n");
+    rc = -ENODEV;
+    goto revert_class;
   }
-  dev_info(dev, DEVICE_NAME ": iospace start = %p, end = %p\n", (void*) r_mem->start, (void*) r_mem->end);
+  dev_info(dev, "found memory mapped segment\n");
   
   sha256_dev.mem_start = r_mem->start;
   sha256_dev.mem_end = r_mem->end;
 
   if (!request_mem_region(sha256_dev.mem_start,
         sha256_dev.mem_end - sha256_dev.mem_start + 1, DRIVER_NAME)) {
-    dev_err(dev, DEVICE_NAME ": couldn't lock memory region at %p\n", (void *)sha256_dev.mem_start);
-    return -EBUSY;
+    dev_err(dev, "couldn't lock memory region at %p\n", (void *)sha256_dev.mem_start);
+    rc = -EBUSY;
+    goto revert_class;
   }
 
   sha256_dev.base_addr = 
     ioremap(sha256_dev.mem_start,sha256_dev.mem_end - sha256_dev.mem_start + 1);
   if (!sha256_dev.base_addr) {
-    dev_err(dev, DEVICE_NAME ": could not allocate iomem\n");
+    dev_err(dev, "could not allocate iomem\n");
     rc = -EIO;
     goto revert_memrq;
   }
-  dev_info(dev, DEVICE_NAME ": %p mapped to %p\n", 
+  dev_info(dev, "%p mapped to %p\n", 
       (void*)sha256_dev.mem_start, (void*)sha256_dev.base_addr);
 
   /* concurrency handling */
@@ -624,49 +649,62 @@ static int sha256Probe(struct platform_device *pdev) {
 
   /* IO buffers */
   if (!(sha256_dev.hash_ptr = kmalloc(32, GFP_KERNEL))) {
-    dev_err(dev, DEVICE_NAME ": failed reading buffer allocation\n");
+    dev_err(dev, "failed reading buffer allocation\n");
     rc = -ENOMEM;
     goto revert_memrmap;
   }
   if (!(sha256_dev.block_ptr = kmalloc(64, GFP_KERNEL))) {
-    dev_err(dev, DEVICE_NAME ": failed writing buffer allocation\n");
+    dev_err(dev, "failed writing buffer allocation\n");
     rc = -ENOMEM;
     goto revert_hashalloc;
   }
 
   /* Get IRQ for the device */
   if (irq_enable) {
-    
-    r_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-    if (!r_irq) {
-      dev_err(dev, DEVICE_NAME ": no irq found\n");
-      rc = -ENXIO;
+      
+    sha256_dev.irq = platform_get_irq(pdev, 0);
+    if (sha256_dev.irq < 0) {
+      dev_err(dev, "unable to get irq number\n");
+      rc = sha256_dev.irq; 
       goto revert_blockalloc;
     }
-    
-    sha256_dev.irq = r_irq->start;
-    dev_info(dev, DEVICE_NAME ": irq = %d\n", sha256_dev.irq);
+    dev_info(dev, "irq = %d\n", sha256_dev.irq);
 
     rc = request_irq(sha256_dev.irq, sha256IRQHandler, 
-        0, DRIVER_NAME, NULL);
-    if (rc) {
-      dev_err(dev, DEVICE_NAME ": could not allocate interrupt\n");
+        IRQF_TRIGGER_RISING, DRIVER_NAME, &sha256_dev);
+    if (rc < 0) {
+      dev_err(dev, "could not allocate interrupt\n");
       goto revert_blockalloc;
     }
+    dev_info(dev, "irq registered\n");
 
-    dev_info(dev, DEVICE_NAME ": irq registered\n");
   } /* irq_enable */
 
-  dev_info(dev, DEVICE_NAME ": done initialization\n");
+
+  /* finalize device representation */
+  if ((rc = cdev_add(&sha256_dev.cdev, dev_number, 1)) < 0) {
+    dev_err(dev, "failed to notify struct cdev to the kernel\n");
+    goto revert_irq_blockallock;
+  }
+  dev_info(dev, "done initialization\n");
 
   return 0;
 
-revert_blockalloc : kfree(sha256_dev.block_ptr);
-revert_hashalloc  : kfree(sha256_dev.hash_ptr);
-revert_memrmap    : iounmap(sha256_dev.base_addr);
-revert_memrq      : release_mem_region(sha256_dev.mem_start, sha256_dev.mem_end - sha256_dev.mem_start + 1);
+revert_irq_blockallock : 
 
-                    return rc;
+  if (irq_enable) {
+    free_irq(sha256_dev.irq, &sha256_dev); 
+  }
+
+revert_blockalloc      : kfree(sha256_dev.block_ptr);
+revert_hashalloc       : kfree(sha256_dev.hash_ptr);
+revert_memrmap         : iounmap(sha256_dev.base_addr);
+revert_memrq           : release_mem_region(sha256_dev.mem_start, sha256_dev.mem_end - sha256_dev.mem_start + 1);
+revert_class           : class_unregister(dev_class);
+                         class_destroy(dev_class); 
+revert_chrdev          : unregister_chrdev_region(dev_number, 1);
+
+                         return rc;
 }
 
 static int __init sha256Init(void) {
@@ -675,65 +713,32 @@ static int __init sha256Init(void) {
 
   PR_INFO("sha256Init(): irq_enable = %s", (irq_enable ? "true" : "false"));
 
-  /* dynamically allocate device number */
-  if ((rc = alloc_chrdev_region(&dev_number, 0, 1, DEVICE_NAME))) {
-    PR_ALERT("failed device number allocation");
+  /* register the driver */ 
+  if ((rc = platform_driver_register(&sha256_driver)) < 0) {
+    PR_ALERT("failed platform driver registration");
+
     return rc;
   }
-  PR_INFO("device number allocated: major = %d, minor = %d", MAJOR(dev_number), MINOR(dev_number));
-
-  /* register device class */
-  dev_class = class_create(THIS_MODULE, CLASS_NAME);
-  if (IS_ERR(dev_class)) {
-    PR_ALERT("failed class creation");
-    rc = PTR_ERR(dev_class);
-    goto revert_chrdev;
-  }
-  PR_INFO("device class registered");
- 
-  /*
-   * initialize device representation within the driver
-   */ 
-  if ((rc = platform_driver_register(&sha256_driver))) {
-    PR_ALERT("failed platform driver registration");
-    goto revert_class;
-  }
   PR_INFO("platform driver registered");
-
- /* finalize device representation */
-
-  cdev_init(&sha256_dev.cdev, &sha256_fops);
-  sha256_dev.cdev.owner = THIS_MODULE; 
-  PR_INFO("initialized device representation");
-
-  if ((rc = cdev_add(&sha256_dev.cdev, dev_number, 1))) {
-    PR_ALERT("failed to notify struct cdev to the kernel");
-    goto revert_ptfmreg;
-  }
-  PR_INFO("cdev notified to the kernel");
 
   /* create device file */
   dev = device_create(dev_class, NULL, dev_number, NULL, DEVICE_NAME);
   if (IS_ERR(dev)) {
     PR_ALERT("failed device file creation");
-    rc = PTR_ERR(dev);
-    goto revert_devadd;
+
+    platform_driver_unregister(&sha256_driver);
+    return PTR_ERR(dev);
   }
   PR_INFO("device file created");
 
   return 0;
 
-revert_devadd  : cdev_del(&sha256_dev.cdev);
-revert_ptfmreg : platform_driver_unregister(&sha256_driver);
-revert_class   : class_unregister(dev_class);
-                 class_destroy(dev_class); 
-revert_chrdev  : unregister_chrdev_region(dev_number, 1);
-
-                 return rc;
 }
 
 static int sha256Remove(struct platform_device *pdev) {
   PR_DEVEL("sha256Remove()");
+
+  cdev_del(&sha256_dev.cdev);
 
   if (irq_enable)
     free_irq(sha256_dev.irq, &sha256_dev); 
@@ -742,6 +747,9 @@ static int sha256Remove(struct platform_device *pdev) {
   kfree(sha256_dev.hash_ptr);
   iounmap(sha256_dev.base_addr);
   release_mem_region(sha256_dev.mem_start, sha256_dev.mem_end - sha256_dev.mem_start + 1);
+  class_unregister(dev_class);
+  class_destroy(dev_class); 
+  unregister_chrdev_region(dev_number, 1);
 
   return 0;
 }
@@ -750,12 +758,7 @@ static void __exit sha256Exit(void) {
   PR_INFO("sha256Exit()");
 
   device_destroy(dev_class, dev_number);
-  cdev_del(&sha256_dev.cdev);
   platform_driver_unregister(&sha256_driver);
-  class_unregister(dev_class);
-  class_destroy(dev_class); 
-  unregister_chrdev_region(dev_number, 1);
-
 }
 
 module_init(sha256Init);
@@ -767,5 +770,5 @@ module_exit(sha256Exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("F. Scatozza, I. Delpero, L. Cerruti, C. Capobianchi, S. Alipour, A. Rehman, S. Perera");
 MODULE_DESCRIPTION("Driver for the gv_sha256 cryptocore implemented in the pynq-z2 board.");
-MODULE_VERSION("0.1");
+MODULE_VERSION("0.1.1");
 
