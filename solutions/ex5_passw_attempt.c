@@ -113,7 +113,6 @@ void *passwcheck(void *exchange_data){
 	
 	//Convert the hash to string format
 	
-	//Try this:
 	hash[0] = '\0';
 	for(i=0; i<8; i++){
 		sprintf(strtmp, "%08x", read_hash[i]);
@@ -245,10 +244,8 @@ int main(int argc , char* argv[]) {
 	flag=0;
 	for(int j=0; j<i-1; j++){
 		
-		//char * tmp = NULL;
 		//Reading the returned string from each thread
 		pthread_join(tid[j], NULL);
-		//printf("Value returned : %s\n",result);
 
 		//If a valid password was found, the return string would be different than 0
 		if(exchange_data.valid==1){
