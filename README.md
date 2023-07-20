@@ -496,9 +496,7 @@ to use some system calls:
 
 The following graph summarize how to use the system calls to send the message to the core, in both
 concatenated and non-concatenated mode.
-<p align="center">
-<img src="doc/Instruction_scheme.png" width="900">
-</p>
+
 
 ### Exercises
 
