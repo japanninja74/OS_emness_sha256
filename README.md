@@ -484,8 +484,7 @@ to use some system calls:
 * open(): it enables the core.
 * close(): it disables the core.
 * ioctl(): to choose between concatenated (writing 1) or non-concatenated mode.
- (writing 0). Please notice that it is important to always specify the desired behaviour,
- there is no guarantee that at the beginning non-concatenated mode is active.
+ (writing 0). Please remember to always disable concatenation mode when it is no more required.
 * lseek(): allows to reset the core (if final position == 0) or to add some bytes filled
  with 0s (if final position > current position).
 * write(): to send the message from which the hash must be computed. Writing a number
