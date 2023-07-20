@@ -815,7 +815,7 @@ The platform driver can specify the platform devices it services with a match ta
 
 ## License
 
-Code: [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+Code: [GNU GPLv2](https://choosealicense.com/licenses/gpl-2.0/)
 
 Documentation: [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/)
 

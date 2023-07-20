@@ -1,6 +1,6 @@
 /**
-* File              : server.c
-* 					  server simulation program
+* File              : ex7_server.c
+*                     server simulation program
 *
 * Authors           : Fabio Scatozza      <s315216@studenti.polito.it>
 *                     Isacco Delpero      <s314713@studenti.polito.it>
@@ -11,27 +11,22 @@
 *                     Stephano Perera     <s313080@studenti.polito.it>
 *
 * Date              : 04.07.2023
-* Last Modified Date: 06.07.2023
+* Last Modified Date: 20.07.2023
 *
 * Copyright (c) 2023
 *
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
 *
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /**
@@ -55,7 +50,7 @@
 #include <pthread.h>            //              threads
 #include "ex7_sem_shm_string.h" //              header for semaphore calls and common #define between server and client
 
-				//		driver
+                                //              driver
 #include <stdbool.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -179,9 +174,9 @@ void *th_routine (void *database){
             exit(errno);
         }
         
-	//give time to client process to pass from ready to run state and save content of shared memory
-	//this avoids the semaphore to be deleted too early
-	usleep(1000);
+        //give time to client process to pass from ready to run state and save content of shared memory
+        //this avoids the semaphore to be deleted too early
+        usleep(1000);
         if (semctl(semid, 0, IPC_RMID, dummy) == -1) {
             perror("Error in removing semaphores");
             exit(errno);
@@ -194,7 +189,7 @@ void *th_routine (void *database){
             perror("Error in removing memory");
             exit(errno);
         }
-     	//close connection to hash driver
+        //close connection to hash driver
         close(fd);                                                       
         }
 }
@@ -203,11 +198,11 @@ int main () {
     //example of server database with user and hashed passwords
     user database[DB_SIZE];    
     strcpy(database[0].email,"user1@polito.it");
-    strcpy(database[0].password,"e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349");	//passowrd=pass1
+    strcpy(database[0].password,"e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349");    //passowrd=pass1
     strcpy(database[1].email,"user2@polito.it");
-    strcpy(database[1].password,"1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9");	//passowrd=pass2
+    strcpy(database[1].password,"1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9");    //passowrd=pass2
     strcpy(database[2].email,"user3@polito.it");
-    strcpy(database[2].password,"3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167");	//password=pass3
+    strcpy(database[2].password,"3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167");    //password=pass3
     
     //creation of arbitrary number of threads with access to the database
     pthread_t tid[NUM_THREADS];
