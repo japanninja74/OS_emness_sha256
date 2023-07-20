@@ -6,8 +6,9 @@ Open access lab experience as an introduction to the development of Linux/FreeRT
 for hardware accelerators.
 
 The idea comes from the [EMNESS](https://emness.eu) initiative, with the goal to structure an
-innovative academic curriculum on reliability and hardware security. The project is submitted as
-part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
+innovative academic curriculum on reliability and hardware security. This material was originally
+developed as part of an assignment of the Operating Systems course (04JEZOQ) delivered at
+Politecnico di Torino by Prof. Stefano Di Carlo and Prof. Alessio Carpegna.
 
 ## Contributors
 
