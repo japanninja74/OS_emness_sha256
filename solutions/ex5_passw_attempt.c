@@ -50,7 +50,6 @@ second input file.
 #define SHA256_IOC_WCAT   _IOW(SHA256_IOC_MAGIC, 1, int)
 
 
-//char *result=NULL;
 
     typedef struct {
 	char *line;
@@ -122,13 +121,6 @@ void *passwcheck(void *exchange_data){
 	}
 	
 	
-	//If the version above doesn't work use this one instead
-	/*sprintf(hash, "%08x", read_hash[0]);
-	for(i=1; i<8; i++){
-		sprintf(strtmp, "%08x", read_hash[i]);
-		strcat(hash, strtmp);
-	}*/
-	
 	
 	printf("Reading %s from the core\n", hash);
 	
@@ -146,13 +138,7 @@ void *passwcheck(void *exchange_data){
 		//else return the password
 		sem_post(&hash_sem);
 		printf("Password Matched\n");
-/*
-		if((arg = realloc(arg,(sizeof(char)*strlen(password))))== NULL){
-			printf("Error in realloc()\n");	
-			exit(-1);
-		}
-		*/
-		//memcpy((char*)arg, (char*)password, strlen(password)+1);
+		//Write in the result if a correct password is found
 		exchg_data->result = (char*) malloc(strlen(password)+1);
         memcpy((char*)exchg_data->result, (char*)password, strlen(password)+1);
 		printf("Thread %lu returns: %s\n",pthread_self(), exchg_data->result);
