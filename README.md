@@ -80,6 +80,9 @@ part of the Operating System (04JEZOQ) exam at the Politecnico di Torino.
     - [Exercise 6 - Pipe secure comunication](#exercise-6---pipe-secure-comunication)
     - [Exercise 7 - Client and Server](#exercise-7---client-and-server)
     - [Exercise 8 - Possible attacks](#exercise-8---possible-attacks)
+- [The Driver](#the-driver)
+  - [The Platform Device API](#the-platform-device-api)
+  - [Device Trees](#device-trees)
 - [License](#license)
 - [Sources](#sources)
 
@@ -660,6 +663,156 @@ Approach 2: Try to develop a non working version of the driver starting from the
 
 Hint: Try to modify the read or write function of the driver in order to make wrong data.
 
+## The Driver
+Not only in general purpose systems but especially in embedded systems, it's fundamental to
+encapsulate the knowledge of hardware as mush as possible, providing a simple and uniform interface
+to be used at higher levels of abstraction. 
+In Linux, this is achieved by virtualizing most of the resources as files, which allows applications
+to manipulate them with the same set of system calls available for normal files: `open()`, `read()`, 
+`write()`, `close()`, etc. 
+
+This framework relies on the Virtual File System (VFS), which abstracts the underlying file system
+implementation providing the low-level functions used internally by file system calls and run in
+kernel space, being Linux based on a monolithic kernel.
+This latter mechanism is crucial to handle peripherals: the knowledge about how the
+peripheral works is hidden in the device driver, a C module that provides an implementation for
+those low-level functions supported by the VFS. As a consequence, once the device has been made
+available as a special file in the `/dev` directory of the root file system, when executing
+a file system call, the VFS appropriately binds those functions to their implementation in the
+driver.
+
+Linux recognizes three classes of devices:
+
+* character devices, accessed as stream of sequential words as in a conventional files. This is the
+  case of our crypto core
+
+* block devices, accessed only as multiples of a byte-block
+
+* network interfaces, in charge of sending and receiving data packets through the subsystem of the
+  kernel
+
+The devices are identified with numbers internally split into:
+
+* major number, which indicates the family of the device
+
+* minor number, which allows differentiating among multiple instances of a major device type
+
+and the problem of assigning these numbers can be solved either statically or dynamically.
+
+The device file, also called device nodes, are the entry point for applications to communicate with
+kernel space and hardware peripherals. Device nodes can be created manually as it was done in the
+past, but recent kernel versions provide an API to perform it automatically. This requires the
+device to be registered in a class, seen as a directory inside `/sys`.
+
+### The Platform Device API
+Peripherals connected to buses like PCI and USB can tell the system what they are as well as what
+resources they exhibit and where to find them, because of the enumeration support built in the
+protocol. For plenty of devices, such as SoC sub-modules, this is not available and the Platform
+Device is the kernel mechanism for dealing with non-discoverability.
+
+A platform device is represented in code by a `struct platform_device` and is meant to be connected to
+a software abstraction that behaves like a statically enumerated bus, the platform bus. The driver
+of a platform device must declare itself as such by registering with the platform bus and is
+represented by a `struct platform driver`:
+
+        static struct platform_driver sha256_driver = {
+          .driver = {
+            .name = DRIVER_NAME,
+            .owner = THIS_MODULE,
+            .of_match_table     = sha256_of_match,
+          },
+          .probe                = sha256Probe,
+          .remove               = sha256Remove,
+        };
+
+Once the platform device has registered itself:
+
+        static int __init sha256Init(void) {
+
+          ...
+
+          /* register the driver */ 
+          if ((rc = platform_driver_register(&sha256_driver)) < 0) {
+            PR_ALERT("failed platform driver registration");
+
+            return rc;
+          }
+
+          ...
+
+        }
+
+The platform bus code performs the binding based on the `.driver` member: if a compatible platform
+device gets discovered, the platform driver function `probe()` is invoked and receives as argument
+the representation of the device:
+
+        struct platform_device {
+            const char *name;
+            int	id;
+            bool id_auto;
+            struct device dev;
+            u64 platform_dma_mask;
+            struct device_dma_parameters dma_parms;
+            u32	num_resources;
+            struct resource	*resource;
+
+            const struct platform_device_id	*id_entry;
+            /*
+             * Driver name to force a match.  Do not set directly, because core
+             * frees it.  Use driver_set_override() to set or clear it.
+             */
+            const char *driver_override;
+
+            /* MFD cell pointer */
+            struct mfd_cell *mfd_cell;
+
+            /* arch specific additions */
+            struct pdev_archdata	archdata;
+        };
+
+As a result, the programmer can rely on the `resource` array to learn where the various resources
+are, most notably: memory mapped segments and interrupt lines.
+
+### Device Trees
+The Platform Device scheme moves the problem out of programmers' hands and to whoever deals with
+creating the descriptions for the devices present on the system, the system-specific "board files".
+Therefore, a kernel built around a certain board file lacks the flexibility to boot on any other
+system.
+
+The alternative are Device Trees, textual descriptions of a system's hardware configuration passed
+to the kernel at boot-time to learn about the system is being run on.
+
+        / {
+            amba_pl: amba_pl {
+                #address-cells = <1>;
+                #size-cells = <1>;
+                compatible = "simple-bus";
+                ranges ;
+                gv_sha256_0: gv_sha256@43c00000 {
+                    clock-names = "s00_axi_aclk";
+                    clocks = <&clkc 15>;
+                    compatible = "xlnx,gv-sha256-1.0";
+                    interrupt-names = "sha256_irq";
+                    interrupt-parent = <&intc>;
+                    interrupts = <0 29 1>;
+                    reg = <0x43c00000 0x10000>;
+                    xlnx,s00-axi-addr-width = <0x7>;
+                    xlnx,s00-axi-data-width = <0x20>;
+                };
+            };
+        };
+
+In a device tree, platform devices are either direct children of the root or attached to a `simple
+bus`: when the kernel processes the device tree, the node contains the information that gets
+abstracted into the `struct platform_device`. 
+
+The platform driver can specify the platform devices it services with a match table:
+
+    static struct of_device_id sha256_of_match[] = {
+      { .compatible  = "xlnx,gv-sha256-1.0", },
+      { /* end of list */ },
+    };
+
 ## License
 
 Code: [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
@@ -668,15 +821,19 @@ Documentation: [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/)
 
 
 ## Sources
-[Hash Functions][hash-functions] -
 
-[Secure Hash Standard][sh-standard] -
+* SHA-256: [Hash Functions][hash-functions], [Secure Hash Standard][sh-standard]
 
-[SHA-256 Core][sha256-core] - 
+* [SHA-256 hardware implementation][sha256-core]
 
-[AMD Documentation Portal][amd-doc] - 
+* [AMD Documentation Portal][amd-doc]
 
-[OS Concepts][os-concepts] -
+* Theory: 
+  
+    * [OS Concepts][os-concepts]
+
+    * Device drivers: [Introduction to Linux Device Drivers][amd-pltfm], [The platform device API][pltfm-api],
+      [Platform devices and device trees][pltfm-dev] and [Kernel, drivers and embedded Linux development][dev-trees]
 
 [//]: # "Source definitions"
 [hash-functions]: https://csrc.nist.gov/projects/hash-functions "Hash Functions by NIST CSRC"
@@ -684,4 +841,7 @@ Documentation: [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/)
 [sha256-core]: https://opencores.org/projects/sha256_hash_core "SHA-256 HASH CORE"
 [amd-doc]: https://docs.xilinx.com/ "AMD Documentation Portal"
 [os-concepts]: https://www.os-book.com/OS10/ "Operating System Concepts"
-
+[pltfm-api]: https://lwn.net/Articles/448499/ "The platform device API"
+[pltfm-dev]: https://lwn.net/Articles/448502/ "Platform devices and device trees"
+[dev-trees]: https://elinux.org/images/f/f9/Petazzoni-device-tree-dummies_0.pdf "Kernel, drivers and embedded Linux development"
+[amd-pltfm]: https://www.xilinx.com/video/soc/linux-device-drivers-part-2-platform-character-drivers.html "Introduction to Linux Device Drivers"
