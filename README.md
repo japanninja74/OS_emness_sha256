@@ -1,6 +1,6 @@
 # SHA-256 Core Linux Driver on a ZYNQ APSoC 
 
-<img src="doc/figure_1.png" width="100">  
+<img src="doc/figure_1.png">  
 
 Open access lab experience as an introduction to the development of Linux/FreeRTOS device drivers
 for hardware accelerators.
