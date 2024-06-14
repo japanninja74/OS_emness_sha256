@@ -20,6 +20,15 @@ Politecnico di Torino by Prof. Stefano Di Carlo and Prof. Alessio Carpegna.
 [Abdul Rehman](mailto:s315198@studenti.polito.it>), and
 [Stephano Perera](mailto:s313080@studenti.polito.it>)
 
+## Reviewers
+This material was reviewed by:
+
+[Francesco Corvaglia](https://github.com/ElCeqo)
+
+[Niccolò Lentini](https://github.com/niccolentini)
+
+[Amalia Vittoria Montemurro](https://github.com/amaliamon)
+
 ## Project Advancement
 
 * [X] Collect and organize material
